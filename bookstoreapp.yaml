@@ -1,0 +1,1306 @@
+openapi: "3.0.3"
+info:
+  title: "Group Project 3 Alta: Book-store"
+  version: "1.0"
+  description: "API Documentation for Bookstore-app"
+  contact:
+    name: Official
+    url: https://Book-store.site
+    email: rizuananm@gmail.com
+externalDocs:
+  description: "GitHub Repository of Group Project 3 : Book-store"
+  url: https://bookstore-app.com
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/bookstore_group1/bookstore/1.0.0
+  - url: 34.238.252.143:8000
+    description: Base URL that will be used for endpoints
+tags:
+  - name: Login
+    description: Endpoint for verifying who a user is
+  - name: Register
+    description: Endpoint for user registration
+  - name: Users
+    description: Endpoint for perform operations on user
+  - name: Books
+    description: Endpoint for perform operations on books
+  - name: Carts
+    description: Endpoint for perform operations on cart
+  - name: Orders
+    description: Endpoint for perform operations on order
+paths:
+  ####################################
+  #  AUTHENTICATION
+  ####################################
+  /login:
+    post:
+      tags:
+        - Login
+      summary: Get token for access to account
+      requestBody:
+        $ref: "#/components/requestBodies/requestBodyLogin"
+      responses:
+        "200":
+          $ref: "#/components/responses/loginSuccess"
+        "400":
+          $ref: "#/components/responses/loginFailed"
+  ####################################
+  #  SIGN UP
+  ####################################
+  /register:
+    post:
+      tags:
+        - Register
+      summary: Create a new account for customer only
+      requestBody:
+        $ref: "#/components/requestBodies/requestBodyUser"
+      responses:
+        "200":
+          $ref: "#/components/responses/successOperationNonData"
+        "400":
+          $ref: "#/components/responses/createUserFailed"
+  ####################################
+  #  USERS
+  ####################################
+  /users/id:
+    get:
+      tags:
+        - Users
+      summary: Get user's data by id
+      security:
+        - JWTAuth: []
+      responses:
+        "200":
+          $ref: "#/components/responses/getUserSuccess"
+        "400":
+          $ref: "#/components/responses/getDataByIdFailed"
+  /users:
+    put:
+      tags:
+        - Users
+      summary: Edit user's data by id
+      security:
+        - JWTAuth: []
+      requestBody:
+        $ref: "#/components/requestBodies/requestBodyUserUpdate"
+      responses:
+        "200":
+          $ref: "#/components/responses/successOperationNonData"
+        "400":
+          $ref: "#/components/responses/updateUserFailed"
+    delete:
+      tags:
+        - Users
+      summary: Delete user's data by id
+      security:
+        - JWTAuth: []
+      responses:
+        "200":
+          $ref: "#/components/responses/successOperationNonData"
+        "400":
+          $ref: "#/components/responses/deleteDataByIdFailed"
+  ####################################
+  #  BOOKS
+  ####################################
+  /books:
+    post:
+      tags:
+        - Books
+      summary: Create books for admin only
+      security:
+        - JWTAuth: []
+      requestBody:
+        $ref: "#/components/requestBodies/requestBodyBooks"
+      responses:
+        "200":
+          $ref: "#/components/responses/successOperationNonData"
+        "400":
+          $ref: "#/components/responses/createBooksFailed"
+    get:
+      tags:
+        - Books
+      summary: Get all books
+      responses:
+        "200":
+          $ref: "#/components/responses/getAllBooksSuccess"
+        "400":
+          $ref: "#/components/responses/getAllDataFailed"
+  /books/{id}:
+    get:
+      tags:
+        - Books
+      summary: Get books by id
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      responses:
+        "200":
+          $ref: "#/components/responses/getBooksSuccess"
+        "400":
+          $ref: "#/components/responses/getDataByIdFailed"
+    put:
+      tags:
+        - Books
+      summary: Update Books by id for admin only
+      security:
+        - JWTAuth: []
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      requestBody:
+        $ref: "#/components/requestBodies/requestBodyBooksUpdate"
+      responses:
+        "200":
+          $ref: "#/components/responses/successOperationNonData"
+        "400":
+          $ref: "#/components/responses/updateBooksFailed"
+    delete:
+      tags:
+        - Books
+      summary: Delete books by id for admin only
+      security:
+        - JWTAuth: []
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      responses:
+        "200":
+          $ref: "#/components/responses/successOperationNonData"
+        "400":
+          $ref: "#/components/responses/deleteDataByIdFailed"
+  ####################################
+  #  CART
+  ####################################
+  /carts:
+    post:
+      tags:
+        - Carts
+      summary: Create a new cart
+      security:
+        - JWTAuth: []
+      requestBody:
+        $ref: "#/components/requestBodies/requestBodyAddCart"
+      responses:
+        "200":
+          $ref: "#/components/responses/createcartsuccess"
+        "400":
+          $ref: "#/components/responses/createOrderFailed"
+    delete:
+      tags:
+        - Carts
+      summary: Delete cart by id
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      security:
+        - JWTAuth: []
+      responses:
+        "200":
+          $ref: "#/components/responses/successOperationNonData"
+        "400":
+          $ref: "#/components/responses/deleteDataByIdFailed"
+
+  ####################################
+  #  ORDERS
+  ####################################
+  /orders:
+    post:
+      tags:
+        - Orders
+      summary: Create a new order
+      security:
+        - JWTAuth: []
+      requestBody:
+        $ref: "#/components/requestBodies/requestBodyOrder"
+      responses:
+        "200":
+          $ref: "#/components/responses/createcartsuccess"
+        "400":
+          $ref: "#/components/responses/createOrderFailed"
+  /orders/{id}:
+    get:
+      tags:
+        - Orders
+      summary: Get All Detail order by User Id
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      security:
+        - JWTAuth: []
+      responses:
+        "200":
+          $ref: "#/components/responses/getorderbyidsuccess"
+        "400":
+          $ref: "#/components/responses/OrderResponseFailed"
+  /orders/{id}/confirm:
+    post:
+      tags:
+        - Orders
+      summary: Get Detail order by Id
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      security:
+        - JWTAuth: []
+      requestBody:
+        $ref: "#/components/requestBodies/requestBodyConfirmOrder"
+      responses:
+        "200":
+          $ref: "#/components/responses/confirmordersuccess"
+        "400":
+          $ref: "#/components/responses/OrderResponseFailed"
+  /orders/{id}/cancel:
+    put:
+      tags:
+        - Orders
+      summary: Get Detail order by Id
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      security:
+        - JWTAuth: []
+      responses:
+        "200":
+          $ref: "#/components/responses/confirmordersuccess"
+        "400":
+          $ref: "#/components/responses/OrderResponseFailed"
+####################################
+#  COMPONENTS
+####################################
+components:
+  schemas:
+    requestDataLogin:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    requestDataUser:
+      type: object
+      required:
+        - fullname
+        - username
+        - phone
+        - password
+      properties:
+        fullname:
+          type: string
+          minLength: 1
+          pattern: "^0-9A-Za-z_.$"
+        username:
+          type: string
+          format: username
+          minLength: 5
+          description: inputted username must be unique
+        phone:
+          type: integer
+          minLength: 10
+        password:
+          type: string
+          minLength: 6
+    requestDataBooksjson:
+      type: object
+      required:
+        - name_books
+        - detail_books
+        - price
+        - stock
+        - file
+      properties:
+        name_books:
+          type: string
+          minLength: 1
+        detail_books:
+          type: string
+          minLength: 1
+        price:
+          type: integer
+          minimum: 1
+        stock:
+          type: integer
+          minimum: 2
+    
+    requestDataBooks:
+      type: object
+      required:
+        - file
+        - images
+        - title
+        - price
+        - stock
+        - author
+        - sinopsis
+      properties:
+        images:
+          type: string
+          format: binary
+          description: "upload book image"
+        file:
+          type: string
+          format: binary
+          description: "upload book file"
+        title:
+          type: string
+          description: "input title book here"
+        price:
+          type: integer
+          description: "input price book here"
+        stock:
+          type: integer
+          description: "input stock book here"
+        author:
+          type: string
+          description: "input author book here"
+        sinopsis:
+          type: string
+          description: "input sinopsis book here"
+    requestDataBooksUpdate:
+      type: object
+      required:
+        - name_books
+        - detail_books
+        - price
+        - stock
+        - file
+        - images
+      properties:
+        name_books:
+          type: string
+          minLength: 1
+        detail_books:
+          type: string
+          minLength: 1
+        price:
+          type: integer
+          minimum: 1
+        stock:
+          type: integer
+          minimum: 2
+        file:
+          type: string
+          format: binary
+          description: "upload file"
+        image:
+          type: string
+          format: binary
+          description: "upload image"
+    ###
+    requestDataOrder:
+      type: object
+      required:
+        - paymentname
+        - phone
+      properties:
+        paymentname:
+          type: string
+        phone:
+          type: string
+    requestDataOrderUpdate:
+      type: object
+      required:
+        - detail
+      properties:
+        detail:
+          type: string
+    responseLoginWithData:
+      type: object
+      properties:
+        Code:
+          type: integer
+        Data:
+          type: object
+          properties:
+            ID:
+              type: integer
+            Name:
+              type: string
+            Token:
+              type: string
+            Role:
+              type: string
+        Message:
+          type: string
+    responseUserWithData:
+      type: object
+      properties:
+        Code:
+          type: integer
+        Data:
+          type: object
+          properties:
+            ID:
+              type: integer
+            Name:
+              type: string
+            Username:
+              type: string
+            Phone:
+              type: string
+        Message:
+          type: string
+    responseUserWithDataArray:
+      type: object
+      properties:
+        Code:
+          type: integer
+        Data:
+          type: array
+          items:
+            type: object
+            properties:
+              ID:
+                type: integer
+              Name:
+                type: string
+              Username:
+                type: string
+              Phone:
+                type: string
+        Message:
+          type: string
+    responseBooksWithData:
+      type: object
+      properties:
+        Data:
+          type: object
+          properties:
+            ID:
+              type: integer
+            name:
+              type: string
+            detail:
+              type: string
+            price:
+              type: integer
+            stock:
+              type: integer
+            photo:
+              type: string
+              format: binary
+            url:
+              type: string
+            userid:
+              type: int
+        Message:
+          type: string
+    responseBooksWithDataArray:
+      type: object
+      properties:
+        Data:
+          type: array
+          items:
+            type: object
+            properties:
+              ID:
+                type: integer
+              Name_Books:
+                type: string
+              Detail_Books:
+                type: string
+              Price:
+                type: integer
+              Stock:
+                type: integer
+              Photo:
+                type: string
+                format: binary
+              Url:
+                type: string
+              userid:
+                type: int
+        Message:
+          type: string
+    responseGroupBooksWithData:
+      type: object
+      properties:
+        Code:
+          type: integer
+        Data:
+          type: object
+          properties:
+            ID:
+              type: integer
+            BooksID:
+              type: integer
+            NameGroupBooks:
+              type: string
+            Stock:
+              type: integer
+            CapacityGroupBooks:
+              type: integer
+            Price:
+              type: integer
+            AdminFee:
+              type: integer
+            TotalPrice:
+              type: integer
+            DurationGroup:
+              type: string
+            Name_Books:
+              type: string
+            Status:
+              type: string
+            Url:
+              type: string
+            GetOrder:
+              type: array
+              items:
+                type: object
+                properties:
+                  OrderID:
+                    type: integer
+                  UsersID:
+                    type: integer
+                  GroupBooksID:
+                    type: integer
+                  Name:
+                    type: string
+        Message:
+          type: string
+    responseGroupBooksWithDataArray:
+      type: object
+      properties:
+        Code:
+          type: integer
+        Data:
+          type: array
+          items:
+            type: object
+            properties:
+              ID:
+                type: integer
+              BooksID:
+                type: integer
+              NameGroupBooks:
+                type: string
+              Stock:
+                type: integer
+              CapacityGroupBooks:
+                type: integer
+              Price:
+                type: integer
+              AdminFee:
+                type: integer
+              TotalPrice:
+                type: integer
+              DurationGroup:
+                type: string
+              Name_Books:
+                type: string
+              Status:
+                type: string
+              Url:
+                type: string
+              GetOrder:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    OrderID:
+                      type: integer
+                    UsersID:
+                      type: integer
+                    GroupBooksID:
+                      type: integer
+                    Name:
+                      type: string
+        Message:
+          type: string
+    responseCreateGroupBooksWithData:
+      type: object
+      properties:
+        Code:
+          type: integer
+        Data:
+          type: object
+          properties:
+            GroupBooksID:
+              type: integer
+        Message:
+          type: string
+    responseCreateOrderWithData:
+      type: object
+      properties:
+        Code:
+          type: integer
+        Data:
+          type: object
+          properties:
+            OrderID:
+              type: integer
+            EwalletType:
+              type: string
+            ExternalId:
+              type: string
+            Amount:
+              type: number
+            BusinessId:
+              type: string
+            Created:
+              type: string
+        Message:
+          type: string
+    responseOrderWithData:
+      type: object
+      properties:
+        Code:
+          type: integer
+        Data:
+          type: object
+          properties:
+            ID:
+              type: integer
+            UserID:
+              type: integer
+            GroupBooksID:
+              type: integer
+            NameBooks:
+              type: string
+            PriceOrder:
+              type: integer
+            DetailCredential:
+              type: string
+        Message:
+          type: string
+    responseOrderWithDataArray:
+      type: object
+      properties:
+        Code:
+          type: integer
+        Data:
+          type: array
+          items:
+            type: object
+            properties:
+              OrderID:
+                type: integer
+              UsersID:
+                type: integer
+              GroupBooksID:
+                type: integer
+              NameBooks:
+                type: string
+              PriceOrder:
+                type: integer
+              DetailCredential:
+                type: string
+        Message:
+          type: string
+    responseNonData:
+      type: object
+      properties:
+        Code:
+          type: integer
+        Message:
+          type: string
+  parameters:
+    idParam:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+        example: 1
+
+  securitySchemes:
+    JWTAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: "use Token"
+  requestBodies:
+    requestBodyLogin:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/requestDataLogin"
+          example:
+            username: chaeunwoo
+            password: 123
+        multipart/form-data:
+          schema:
+            $ref: "#/components/schemas/requestDataLogin"
+    requestBodyUser:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/requestDataUser"
+          examples:
+            newUser:
+              value:
+                fullname: "jungkook bts"
+                username: "jungkook"
+                phone: "081936665965"
+                password: "123"
+        multipart/form-data:
+          schema:
+            $ref: "#/components/schemas/requestDataUser"
+    requestBodyUserUpdate:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/requestDataUser"
+          examples:
+            newData1:
+              value:
+                fullname: rizunadifa
+                username: difa
+                phone: "08966066096"
+                password: "123"
+        multipart/form-data:
+          schema:
+            $ref: "#/components/schemas/requestDataUser"
+    requestBodyAddCart:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#"
+          example:
+            Books_id: 1
+            quantity: 1
+            price: 100000
+    requestBodyBooks:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            $ref: "#/components/schemas/requestDataBooks"
+        application/json:
+          schema:
+            $ref: "#/components/schemas/requestDataBooksjson"
+          example:
+            title: "the rainbow"
+            price: 100000
+            stock: 5
+            author: sejeong kim
+            sinopsis: pada jaman dahulu kala
+            images: photo.jpg
+            file: file.pdf
+            
+    requestBodyBooksUpdate:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            $ref: "#/components/schemas/requestDataBooks"
+        application/json:
+          schema:
+            $ref: "#/components/schemas/requestDataBooksjson"
+          example:
+            title: "the rainbow"
+            price: 100000
+            stock: 5
+            author: sejeong kim
+            sinopsis: pada jaman dahulu kala
+            images: photo.jpg
+            file: file.pdf
+    requestBodyOrder:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/requestDataOrder"
+          example:
+            cartid: [1]
+            address: {
+              receiver: "ana",
+              phone: "082302xxxx",
+            }
+        multipart/form-data:
+          schema:
+            $ref: "#/components/schemas/requestDataOrder"
+    requestBodyConfirmOrder:
+      required: false
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/requestDataOrder"
+          example:
+            paymentname: "shopeepay"
+            phone: "0819xx"
+        multipart/form-data:
+          schema:
+            $ref: "#/components/schemas/requestDataOrder"
+    requestBodyOrderUpdate:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/requestDataOrderUpdate"
+          example:
+            detail: "Email: subs.netflix@mail.com, Password: qwerty"
+        multipart/form-data:
+          schema:
+            $ref: "#/components/schemas/requestDataOrderUpdate"
+  responses:
+    loginSuccess:
+      description: Success Response Data
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseLoginWithData"
+          example:
+            Code: 200
+            Data:
+              {
+                Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2Mzk2OTAwMjMsInJvbGUiOiJhZG1pbiIsInVzZXJJZCI6NH0.1Ij1ZVqpqPDOVXzaXyqcyNMlnbLTfwD28Byv0aWNjAQ,
+              }
+            role: admin
+            Message: Login Success
+    loginFailed:
+      description: Bad Request Response
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseNonData"
+          example:
+            Code: 400
+            Message: Username or Password Incorrect
+    successOperationNonData:
+      description: Success Response Non Data
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseNonData"
+          example:
+            Code: 200
+            Message: Success Operation
+    createUserFailed:
+      description: Bad Request Response
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseNonData"
+          examples:
+            Invalid Fullname:
+              $ref: "#/components/examples/invalidFullname"
+            Invalid Username:
+              $ref: "#/components/examples/invalidUsername"
+            Invalid Password:
+              $ref: "#/components/examples/invalidPassword"
+            Invalid Phone:
+              $ref: "#/components/examples/invalidPhone"
+            Username Already Exist:
+              $ref: "#/components/examples/usernameOrPhoneNumberAlreadyExist"
+    getAllDataFailed:
+      description: Bad Request Response
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseNonData"
+          examples:
+            Data Not Found:
+              $ref: "#/components/examples/dataNotFound"
+            Bad Request:
+              $ref: "#/components/examples/badRequest"
+    getUserSuccess:
+      description: Success Response Data
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseUserWithData"
+          example:
+            Code: 200
+            Data: { ID: 1, Fullname: cha eun woo, Username: chaeunwoo, Phone: "081936665965", Password: "123" }
+            Message: Success Operation
+    getDataByIdFailed:
+      description: Bad Request Response
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseNonData"
+          examples:
+            Invalid Id:
+              $ref: "#/components/examples/invalidId"
+            Data Not Found:
+              $ref: "#/components/examples/dataNotFound"
+            Bad Request:
+              $ref: "#/components/examples/badRequest"
+    updateUserFailed:
+      description: Bad Request Response
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseNonData"
+          examples:
+            Invalid Id:
+              $ref: "#/components/examples/invalidId"
+            Data Not Found:
+              $ref: "#/components/examples/dataNotFound"
+            Access Forbidden:
+              $ref: "#/components/examples/accessForbidden"
+            Invalid Fullname:
+              $ref: "#/components/examples/invalidFullname"
+            Invalid Username:
+              $ref: "#/components/examples/invalidUsername"
+            Invalid Password:
+              $ref: "#/components/examples/invalidPassword"
+            Invalid Phone:
+              $ref: "#/components/examples/invalidPhone"
+            Username Already Exist:
+              $ref: "#/components/examples/usernameOrPhoneNumberAlreadyExist"
+    deleteDataByIdFailed:
+      description: Bad Request Response
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseNonData"
+          examples:
+            Access Forbidden:
+              $ref: "#/components/examples/accessForbidden"
+            Invalid Id:
+              $ref: "#/components/examples/invalidId"
+            Data Not Found:
+              $ref: "#/components/examples/dataNotFound"
+    createBooksFailed:
+      description: Bad Request Response
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseNonData"
+          examples:
+            File Extension Not Allowed:
+              $ref: "#/components/examples/fileExtensionNotAllowed"
+            Illegal File:
+              $ref: "#/components/examples/illegalFile"
+            Size File Too Big:
+              $ref: "#/components/examples/sizeFileTooBig"
+            Access Forbidden:
+              $ref: "#/components/examples/accessForbidden"
+            Bad Request:
+              $ref: "#/components/examples/badRequest"
+   
+    getAllBooksSuccess:
+      description: Success Response Data
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseBooksWithDataArray"
+          example:
+            data:
+              [
+                {
+                  id: 3,
+                  title: The Rain,
+                  images: https://storage.googleapis.com/Book-store/TheRain.jpg,
+                  stock: 6,
+                  price: 300000,
+                  author: suzy,
+                  sinopsis: once upon a time,
+
+                },
+                {
+                  id: 4,
+                  title: The Moon,
+                  images: https://storage.googleapis.com/Book-store/theRain.jpg,
+                  stock: 4,
+                  price: 200000,
+                  author: difa,
+                  sinopsis: a long time ago,
+                },
+              ]
+            Message: Success
+    getBooksSuccess:
+      description: Success Response Data
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseBooksWithData"
+          example:
+            Data:
+              {
+                id: 3,
+                  title: The Rain,
+                  images: TheRain.jpg,
+                  url: https://storage.googleapis.com/Book-store/TheRain.jpg,
+                  stock: 6,
+                  price: 300000,
+                  userid: 1,
+              }
+            Message: Success
+    updateBooksFailed:
+      description: Bad Request Response
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseNonData"
+          examples:
+            Invalid Id:
+              $ref: "#/components/examples/invalidId"
+            Data Not Found:
+              $ref: "#/components/examples/dataNotFound"
+            Access Forbidden:
+              $ref: "#/components/examples/accessForbidden"
+            Bad Request:
+              $ref: "#/components/examples/badRequest"
+            File Extension Not Allowed:
+              $ref: "#/components/examples/fileExtensionNotAllowed"
+            Size File Too Big:
+              $ref: "#/components/examples/sizeFileTooBig"
+    createcartsuccess:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseCreateOrderWithData"
+          example:
+            Code: 200
+            Message: Success
+    createOrderFailed:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseNonData"
+          examples:
+            Invalid Param:
+              $ref: "#/components/examples/invalidParam"
+            Bad Request:
+              $ref: "#/components/examples/badRequest"
+            Access Forbidden:
+              $ref: "#/components/examples/accessForbidden"
+    getcartsuccess:
+      description: Success Operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseOrderWithData"
+          example:
+            Code: 200
+            Data:
+              [
+                {
+                  UserID: 15,
+                  NameBooks: Netflix,
+                  Image: https://img.io/1,
+                  PriceOrder: 1254,
+                  Qty: 1,
+                },
+                {
+                  UserID: 15,
+                  NameBooks: Youtube Premium,
+                  Image: https://img.io/2,
+                  PriceOrder: 4321,
+                  Qty: 1,
+                },
+              ]
+            Message: Success Operation
+    getorderbyidsuccess:
+      description: Success Operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseOrderWithData"
+          example:
+            Code: 200
+            Data: [
+              {
+                ID: 1,
+                OrderID: 5,
+                Title: "our story",
+                Price: 200000,
+                Qty: 1,
+              }
+            ]
+            message: "success"
+    confirmordersuccess:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseCreateOrderWithData"
+          example:
+            Code: 200
+            Message: Success
+    OrderResponseFailed:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseNonData"
+          examples:
+            Invalid Id:
+              $ref: "#/components/examples/invalidId"
+            Access Forbidden:
+              $ref: "#/components/examples/dataNotFound"
+            Data Not Found:
+              $ref: "#/components/examples/dataNotFound"
+            Bad Request:
+              $ref: "#/components/examples/badRequest"
+    getAllcartByIdGroupSuccess:
+      description: Success Operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseOrderWithDataArray"
+          example:
+            Code: 200
+            Data:
+              [
+                {
+                  OrderID: 1,
+                  UsersID: 150,
+                  GroupBooksID: 1,
+                  NameBooks: Netflix,
+                  PriceOrder: 1254,
+                  DetailCredential: "Username: , Password: ",
+                },
+                {
+                  OrderID: 2,
+                  UsersID: 162,
+                  GroupBooksID: 1,
+                  NameBooks: Netfllix,
+                  PriceOrder: 1254,
+                  DetailCredential: "Username: , Password: ",
+                },
+              ]
+            Message: Success Operation
+    getAllcartByIdUserSuccess:
+      description: Success Operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseOrderWithDataArray"
+          example:
+            Code: 200
+            Data:
+              [
+                {
+                  OrderID: 1,
+                  UsersID: 150,
+                  GroupBooksID: 1,
+                  NameBooks: Netflix,
+                  PriceOrder: 1254,
+                  DetailCredential: "Username: , Password: ",
+                },
+                {
+                  OrderID: 3,
+                  UsersID: 150,
+                  GroupBooksID: 2,
+                  NameBooks: Spotify,
+                  PriceOrder: 1500,
+                  DetailCredential: "Username: , Password: ",
+                },
+              ]
+            Message: Success Operation
+    Updatecartsuccess:
+      description: Success Operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseOrderWithData"
+          example:
+            Code: 200
+            Message: success to update data
+    UpdateCartFailed:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: "#"
+          example:
+            Code: 400
+            Message: failed to update data
+    UpdateOrderFailed:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseNonData"
+          examples:
+            Details Can't Be Empty:
+              $ref: "#/components/examples/detailsCantBeEmpty"
+            Invalid Id:
+              $ref: "#/components/examples/invalidId"
+            Access Forbidden:
+              $ref: "#/components/examples/dataNotFound"
+            Data Not Found:
+              $ref: "#/components/examples/dataNotFound"
+            Bad Request:
+              $ref: "#/components/examples/badRequest"
+  examples:
+    accessIsDenied:
+      value:
+        Code: 400
+        Message: Access is denied ID data is in the orderInvalid Id
+    accessForbidden:
+      value:
+        Code: 400
+        Message: Access Forbidden
+    badRequest:
+      value:
+        Code: 400
+        Message: Bad Request
+    cantConnecttoServer:
+      value:
+        Code: 500
+        Message: Can't Connect to server
+    dataisAvailable:
+      value:
+        Code: 400
+        Message: Data is Available
+    dataNotFound:
+      value:
+        Code: 400
+        Message: Data Not Found
+    detailsCantBeEmpty:
+      value:
+        Code: 400
+        Message: Details Can't Be Empty
+    usernameOrPhoneNumberAlreadyExist:
+      value:
+        Code: 400
+        Message: username or Telephone Number Already Exist
+    failedtoUploadFile:
+      value:
+        Code: 500
+        Message: Failed to Upload File
+    fileExtensionNotAllowed:
+      value:
+        Code: 400
+        Message: File Extension Not Allowed
+    
+    idBooksNotFound:
+      value:
+        Code: 400
+        Message: Id Books Not Found
+    illegalFile:
+      value:
+        Code: 400
+        Message: Illegal File
+    invalidPassword:
+      value:
+        Code: 400
+        Message: Invalid Password
+    invalidId:
+      value:
+        Code: 400
+        Message: Invalid Id
+    invalidFullname:
+      value:
+        Code: 400
+        Message: Invalid Fullname
+    invalidParam:
+      value:
+        Code: 400
+        Message: Invalid Param
+    invalidTelephoneNumber:
+      value:
+        Code: 400
+        Message: Invalid Telephone Number
+    invalidUsername:
+      value:
+        Code: 400
+        Message: Invalid Username
+    notAvailable:
+      value:
+        Code: 400
+        Message: Not Available
+    invalidPhone:
+      value:
+        Code: 400
+        Message: Invalid Phone Number
+    sizeFileTooBig:
+      value:
+        Code: 400
+        Message: Size File Too Big
