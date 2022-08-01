@@ -11,11 +11,11 @@ import (
 
 type AppConfig struct {
 	Driver                string
-	Name                  string
-	Address               string
-	Port                  int
-	Username              string
-	Password              string
+	DB_NAME               string
+	DB_HOST               string
+	DB_PORT               int
+	DB_USERNAME           string
+	DB_PASSWORD           string
 	AWS_REGION            string
 	AWS_ACCESS_KEY_ID     string
 	AWS_SECRET_ACCESS_KEY string
