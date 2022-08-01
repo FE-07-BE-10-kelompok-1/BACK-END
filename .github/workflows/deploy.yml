@@ -23,4 +23,4 @@ jobs:
             docker rm bookstoreContainer
             docker rmi bookstore-api
             docker build -t bookstore-api:latest .
-            docker run -d -p 80:80 -e Username=${{ secrets.DB_USERNAME }} -e Password=${{ secrets.DB_PASSWORD }} -e Port=${{ secrets.DB_PORT }} -e Address=${{ secrets.DB_HOST }} -e Name=${{ secrets.DB_NAME }} -e SECRET=${{ secrets.SECRET }} -e SERVERPORT=${{ secrets.SERVERPORT }} --name bookstoreContainer bookstore-api:latest
+            docker run -d -p 8081:8000 -e Username=${{ secrets.DB_USERNAME }} -e Password=${{ secrets.DB_PASSWORD }} -e Port=${{ secrets.DB_PORT }} -e Address=${{ secrets.DB_HOST }} -e Name=${{ secrets.DB_NAME }} -e SECRET=${{ secrets.SECRET }} -e SERVERPORT=${{ secrets.SERVERPORT }} --name bookstoreContainer bookstore-api:latest
