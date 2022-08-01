@@ -45,6 +45,15 @@ paths:
           $ref: "#/components/responses/loginSuccess"
         "400":
           $ref: "#/components/responses/loginFailed"
+        "500":
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: internal server error
   ####################################
   #  SIGN UP
   ####################################
@@ -60,6 +69,15 @@ paths:
           $ref: "#/components/responses/successOperationNonData"
         "400":
           $ref: "#/components/responses/createUserFailed"
+        "500":
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: internal server error
   ####################################
   #  USERS
   ####################################
@@ -75,6 +93,15 @@ paths:
           $ref: "#/components/responses/getUserSuccess"
         "400":
           $ref: "#/components/responses/getDataByIdFailed"
+        "500":
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: internal server error
   /users:
     put:
       tags:
@@ -89,6 +116,15 @@ paths:
           $ref: "#/components/responses/successOperationNonData"
         "400":
           $ref: "#/components/responses/updateUserFailed"
+        "500":
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: internal server error
     delete:
       tags:
         - Users
@@ -100,6 +136,15 @@ paths:
           $ref: "#/components/responses/successOperationNonData"
         "400":
           $ref: "#/components/responses/deleteDataByIdFailed"
+        "500":
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: internal server error
   ####################################
   #  BOOKS
   ####################################
@@ -117,6 +162,15 @@ paths:
           $ref: "#/components/responses/successOperationNonData"
         "400":
           $ref: "#/components/responses/createBooksFailed"
+        "500":
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: internal server error
     get:
       tags:
         - Books
@@ -126,6 +180,15 @@ paths:
           $ref: "#/components/responses/getAllBooksSuccess"
         "400":
           $ref: "#/components/responses/getAllDataFailed"
+        "500":
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: internal server error
   /books/{id}:
     get:
       tags:
@@ -138,6 +201,15 @@ paths:
           $ref: "#/components/responses/getBooksSuccess"
         "400":
           $ref: "#/components/responses/getDataByIdFailed"
+        "500":
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: internal server error
     put:
       tags:
         - Books
@@ -153,6 +225,15 @@ paths:
           $ref: "#/components/responses/successOperationNonData"
         "400":
           $ref: "#/components/responses/updateBooksFailed"
+        "500":
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: internal server error
     delete:
       tags:
         - Books
@@ -166,6 +247,15 @@ paths:
           $ref: "#/components/responses/successOperationNonData"
         "400":
           $ref: "#/components/responses/deleteDataByIdFailed"
+        "500":
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: internal server error
   ####################################
   #  CART
   ####################################
@@ -183,6 +273,15 @@ paths:
           $ref: "#/components/responses/createcartsuccess"
         "400":
           $ref: "#/components/responses/createOrderFailed"
+        "500":
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: internal server error
     delete:
       tags:
         - Carts
@@ -196,6 +295,15 @@ paths:
           $ref: "#/components/responses/successOperationNonData"
         "400":
           $ref: "#/components/responses/deleteDataByIdFailed"
+        "500":
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: internal server error
 
   ####################################
   #  ORDERS
@@ -214,6 +322,15 @@ paths:
           $ref: "#/components/responses/createcartsuccess"
         "400":
           $ref: "#/components/responses/createOrderFailed"
+        "500":
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: internal server error
   /orders/{id}:
     get:
       tags:
@@ -228,6 +345,15 @@ paths:
           $ref: "#/components/responses/getorderbyidsuccess"
         "400":
           $ref: "#/components/responses/OrderResponseFailed"
+        "500":
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: internal server error
   /orders/all:
     get:
       tags:
@@ -240,6 +366,15 @@ paths:
           $ref: "#/components/responses/getallorder"
         "400":
           $ref: "#/components/responses/OrderResponseFailed"
+        "500":
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: internal server error
   /orders/delete:
     delete:
       tags:
@@ -254,6 +389,15 @@ paths:
           $ref: "#/components/responses/successOperationNonData"
         "400":
           $ref: "#/components/responses/deleteDataByIdFailed"
+        "500":
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                code: 500
+                message: internal server error
     
 ####################################
 #  COMPONENTS
@@ -278,7 +422,6 @@ components:
         fullname:
           type: string
           minLength: 1
-          pattern: "^0-9A-Za-z_.$"
         username:
           type: string
           format: username
@@ -397,66 +540,66 @@ components:
     responseLoginWithData:
       type: object
       properties:
-        Code:
+        code:
           type: integer
-        Data:
+        data:
           type: object
           properties:
-            ID:
+            id:
               type: integer
-            Name:
+            name:
               type: string
-            Token:
+            token:
               type: string
-            Role:
+            role:
               type: string
         Message:
           type: string
     responseUserWithData:
       type: object
       properties:
-        Code:
+        code:
           type: integer
-        Data:
+        data:
           type: object
           properties:
-            ID:
+            id:
               type: integer
-            Name:
+            name:
               type: string
-            Username:
+            username:
               type: string
-            Phone:
+            phone:
               type: string
-        Message:
+        message:
           type: string
     responseUserWithDataArray:
       type: object
       properties:
-        Code:
+        code:
           type: integer
-        Data:
+        data:
           type: array
           items:
             type: object
             properties:
-              ID:
+              id:
                 type: integer
-              Name:
+              name:
                 type: string
-              Username:
+              username:
                 type: string
-              Phone:
+              phone:
                 type: string
-        Message:
+        message:
           type: string
     responseBooksWithData:
       type: object
       properties:
-        Data:
+        data:
           type: object
           properties:
-            ID:
+            id:
               type: integer
             name:
               type: string
@@ -473,218 +616,218 @@ components:
               type: string
             userid:
               type: int
-        Message:
+        message:
           type: string
     responseBooksWithDataArray:
       type: object
       properties:
-        Data:
+        data:
           type: array
           items:
             type: object
             properties:
-              ID:
+              id:
                 type: integer
-              Name_Books:
+              name_books:
                 type: string
-              Detail_Books:
+              detail_books:
                 type: string
-              Price:
+              price:
                 type: integer
-              Stock:
+              stock:
                 type: integer
-              Photo:
+              photo:
                 type: string
                 format: binary
-              Url:
+              url:
                 type: string
               userid:
                 type: int
-        Message:
+        message:
           type: string
     responseGroupBooksWithData:
       type: object
       properties:
-        Code:
+        code:
           type: integer
-        Data:
+        data:
           type: object
           properties:
-            ID:
+            id:
               type: integer
-            BooksID:
+            booksID:
               type: integer
-            NameGroupBooks:
+            nameGroupBooks:
               type: string
-            Stock:
+            stock:
               type: integer
-            CapacityGroupBooks:
+            capacityGroupBooks:
               type: integer
-            Price:
+            price:
               type: integer
-            AdminFee:
+            adminFee:
               type: integer
-            TotalPrice:
+            totalPrice:
               type: integer
-            DurationGroup:
+            durationGroup:
               type: string
-            Name_Books:
+            name_Books:
               type: string
             Status:
               type: string
-            Url:
+            url:
               type: string
-            GetOrder:
+            getOrder:
               type: array
               items:
                 type: object
                 properties:
-                  OrderID:
+                  orderID:
                     type: integer
-                  UsersID:
+                  usersID:
                     type: integer
-                  GroupBooksID:
+                  groupBooksID:
                     type: integer
-                  Name:
+                  name:
                     type: string
-        Message:
+        message:
           type: string
     responseGroupBooksWithDataArray:
       type: object
       properties:
-        Code:
+        code:
           type: integer
-        Data:
+        data:
           type: array
           items:
             type: object
             properties:
-              ID:
+              id:
                 type: integer
-              BooksID:
+              booksID:
                 type: integer
-              NameGroupBooks:
+              nameGroupBooks:
                 type: string
-              Stock:
+              stock:
                 type: integer
-              CapacityGroupBooks:
+              capacityGroupBooks:
                 type: integer
-              Price:
+              price:
                 type: integer
-              AdminFee:
+              adminFee:
                 type: integer
-              TotalPrice:
+              totalPrice:
                 type: integer
-              DurationGroup:
+              durationGroup:
                 type: string
-              Name_Books:
+              name_Books:
                 type: string
-              Status:
+              status:
                 type: string
-              Url:
+              url:
                 type: string
-              GetOrder:
+              getOrder:
                 type: array
                 nullable: true
                 items:
                   type: object
                   properties:
-                    OrderID:
+                    orderID:
                       type: integer
-                    UsersID:
+                    usersID:
                       type: integer
-                    GroupBooksID:
+                    groupBooksID:
                       type: integer
-                    Name:
+                    name:
                       type: string
-        Message:
+        message:
           type: string
     responseCreateGroupBooksWithData:
       type: object
       properties:
-        Code:
+        code:
           type: integer
-        Data:
+        data:
           type: object
           properties:
-            GroupBooksID:
+            groupBooksID:
               type: integer
-        Message:
+        message:
           type: string
     responseCreateOrderWithData:
       type: object
       properties:
-        Code:
+        code:
           type: integer
-        Data:
+        data:
           type: object
           properties:
-            OrderID:
+            orderID:
               type: integer
-            EwalletType:
+            ewalletType:
               type: string
-            ExternalId:
+            externalId:
               type: string
-            Amount:
+            amount:
               type: number
-            BusinessId:
+            businessId:
               type: string
-            Created:
+            created:
               type: string
-        Message:
+        message:
           type: string
     responseOrderWithData:
       type: object
       properties:
-        Code:
+        code:
           type: integer
-        Data:
+        data:
           type: object
           properties:
-            ID:
+            id:
               type: integer
-            UserID:
+            userID:
               type: integer
-            GroupBooksID:
+            groupBooksID:
               type: integer
-            NameBooks:
+            nameBooks:
               type: string
-            PriceOrder:
+            priceOrder:
               type: integer
-            DetailCredential:
+            detailCredential:
               type: string
-        Message:
+        message:
           type: string
     responseOrderWithDataArray:
       type: object
       properties:
-        Code:
+        code:
           type: integer
-        Data:
+        data:
           type: array
           items:
             type: object
             properties:
-              OrderID:
+              orderID:
                 type: integer
-              UsersID:
+              usersID:
                 type: integer
-              GroupBooksID:
+              groupBooksID:
                 type: integer
-              NameBooks:
+              nameBooks:
                 type: string
-              PriceOrder:
+              priceOrder:
                 type: integer
-              DetailCredential:
+              detailCredential:
                 type: string
-        Message:
+        message:
           type: string
     responseNonData:
       type: object
       properties:
-        Code:
+        code:
           type: integer
-        Message:
+        message:
           type: string
   parameters:
     idParam:
@@ -753,7 +896,7 @@ components:
           schema:
             $ref: "#"
           example:
-            Books_id: 1
+            books_id: 1
             quantity: 1
             price: 100000
     requestBodyBooks:
@@ -802,7 +945,7 @@ components:
             booksid: 
               - 2
               - 3
-            Message: Success
+            message: Success
         multipart/form-data:
           schema:
             $ref: "#/components/schemas/requestDataOrder"
@@ -831,7 +974,7 @@ components:
                 Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2Mzk2OTAwMjMsInJvbGUiOiJhZG1pbiIsInVzZXJJZCI6NH0.1Ij1ZVqpqPDOVXzaXyqcyNMlnbLTfwD28Byv0aWNjAQ,
               }
             role: user
-            Message: Login Success
+            message: Login Success
     loginFailed:
       description: Bad Request Response
       content:
@@ -839,8 +982,8 @@ components:
           schema:
             $ref: "#/components/schemas/responseNonData"
           example:
-            Code: 400
-            Message: Username or Password Incorrect
+            code: 400
+            message: Username or Password Incorrect
     successOperationNonData:
       description: Success Response Non Data
       content:
@@ -857,15 +1000,15 @@ components:
           schema:
             $ref: "#/components/schemas/responseNonData"
           examples:
-            Invalid Fullname:
+            invalid Fullname:
               $ref: "#/components/examples/invalidFullname"
-            Invalid Username:
+            invalid Username:
               $ref: "#/components/examples/invalidUsername"
-            Invalid Password:
+            invalid Password:
               $ref: "#/components/examples/invalidPassword"
-            Invalid Phone:
+            invalid Phone:
               $ref: "#/components/examples/invalidPhone"
-            Username Already Exist:
+            username Already Exist:
               $ref: "#/components/examples/usernameOrPhoneNumberAlreadyExist"
     getAllDataFailed:
       description: Bad Request Response
@@ -874,9 +1017,9 @@ components:
           schema:
             $ref: "#/components/schemas/responseNonData"
           examples:
-            Data Not Found:
+            data Not Found:
               $ref: "#/components/examples/dataNotFound"
-            Bad Request:
+            bad Request:
               $ref: "#/components/examples/badRequest"
     getUserSuccess:
       description: Success Response Data
@@ -885,9 +1028,9 @@ components:
           schema:
             $ref: "#/components/schemas/responseUserWithData"
           example:
-            Code: 200
-            Data: { ID: 1, Fullname: cha eun woo, Username: chaeunwoo, Phone: "081936665965", Password: "123" }
-            Message: Success Operation
+            code: 200
+            data: { ID: 1, Fullname: cha eun woo, Username: chaeunwoo, Phone: "081936665965", Password: "123" }
+            message: Success Operation
     getDataByIdFailed:
       description: Bad Request Response
       content:
@@ -895,11 +1038,11 @@ components:
           schema:
             $ref: "#/components/schemas/responseNonData"
           examples:
-            Invalid Id:
+            invalid Id:
               $ref: "#/components/examples/invalidId"
-            Data Not Found:
+            data Not Found:
               $ref: "#/components/examples/dataNotFound"
-            Bad Request:
+            bad Request:
               $ref: "#/components/examples/badRequest"
     updateUserFailed:
       description: Bad Request Response
@@ -908,21 +1051,21 @@ components:
           schema:
             $ref: "#/components/schemas/responseNonData"
           examples:
-            Invalid Id:
+            invalid Id:
               $ref: "#/components/examples/invalidId"
-            Data Not Found:
+            data Not Found:
               $ref: "#/components/examples/dataNotFound"
-            Access Forbidden:
+            access Forbidden:
               $ref: "#/components/examples/accessForbidden"
-            Invalid Fullname:
+            invalid Fullname:
               $ref: "#/components/examples/invalidFullname"
-            Invalid Username:
+            invalid Username:
               $ref: "#/components/examples/invalidUsername"
-            Invalid Password:
+            invalid Password:
               $ref: "#/components/examples/invalidPassword"
-            Invalid Phone:
+            invalid Phone:
               $ref: "#/components/examples/invalidPhone"
-            Username Already Exist:
+            username Already Exist:
               $ref: "#/components/examples/usernameOrPhoneNumberAlreadyExist"
     deleteDataByIdFailed:
       description: Bad Request Response
@@ -931,11 +1074,11 @@ components:
           schema:
             $ref: "#/components/schemas/responseNonData"
           examples:
-            Access Forbidden:
+            access Forbidden:
               $ref: "#/components/examples/accessForbidden"
-            Invalid Id:
+            invalid Id:
               $ref: "#/components/examples/invalidId"
-            Data Not Found:
+            data Not Found:
               $ref: "#/components/examples/dataNotFound"
     createBooksFailed:
       description: Bad Request Response
@@ -944,15 +1087,15 @@ components:
           schema:
             $ref: "#/components/schemas/responseNonData"
           examples:
-            File Extension Not Allowed:
+            file Extension Not Allowed:
               $ref: "#/components/examples/fileExtensionNotAllowed"
-            Illegal File:
+            illegal File:
               $ref: "#/components/examples/illegalFile"
-            Size File Too Big:
+            size File Too Big:
               $ref: "#/components/examples/sizeFileTooBig"
-            Access Forbidden:
+            access Forbidden:
               $ref: "#/components/examples/accessForbidden"
-            Bad Request:
+            bad Request:
               $ref: "#/components/examples/badRequest"
    
     getAllBooksSuccess:
@@ -984,7 +1127,7 @@ components:
                   sinopsis: a long time ago,
                 },
               ]
-            Message: Success
+            message: Success
     getBooksSuccess:
       description: Success Response Data
       content:
@@ -992,7 +1135,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseBooksWithData"
           example:
-            Data:
+            data:
               {
                 id: 3,
                   title: The Rain,
@@ -1002,7 +1145,7 @@ components:
                   price: 300000,
                   userid: 1,
               }
-            Message: Success
+            message: Success
     updateBooksFailed:
       description: Bad Request Response
       content:
@@ -1010,17 +1153,17 @@ components:
           schema:
             $ref: "#/components/schemas/responseNonData"
           examples:
-            Invalid Id:
+            invalid Id:
               $ref: "#/components/examples/invalidId"
-            Data Not Found:
+            data not found:
               $ref: "#/components/examples/dataNotFound"
-            Access Forbidden:
+            access forbidden:
               $ref: "#/components/examples/accessForbidden"
-            Bad Request:
+            bad request:
               $ref: "#/components/examples/badRequest"
-            File Extension Not Allowed:
+            file extension not allowed:
               $ref: "#/components/examples/fileExtensionNotAllowed"
-            Size File Too Big:
+            size File too big:
               $ref: "#/components/examples/sizeFileTooBig"
     createcartsuccess:
       description: Success
@@ -1038,11 +1181,11 @@ components:
           schema:
             $ref: "#/components/schemas/responseNonData"
           examples:
-            Invalid Param:
+            invalid Param:
               $ref: "#/components/examples/invalidParam"
-            Bad Request:
+            bad Request:
               $ref: "#/components/examples/badRequest"
-            Access Forbidden:
+            access Forbidden:
               $ref: "#/components/examples/accessForbidden"
     getcartsuccess:
       description: Success Operation
@@ -1069,7 +1212,7 @@ components:
                   Qty: 1,
                 },
               ]
-            Message: Success Operation
+            message: Success Operation
     getorderbyidsuccess:
       description: Success Operation
       content:
@@ -1077,8 +1220,8 @@ components:
           schema:
             $ref: "#/components/schemas/responseOrderWithData"
           example:
-            Code: 200
-            Data: [
+            code: 200
+            data: [
               {
                 ID: 1,
                 OrderID: 5,
@@ -1096,8 +1239,8 @@ components:
           schema:
             $ref: "#/components/schemas/responseOrderWithData"
           example:
-            Code: 200
-            Data: [
+            code: 200
+            data: [
               {
                 ID: 1,
                 OrderID: 5,
@@ -1124,8 +1267,8 @@ components:
           schema:
             $ref: "#/components/schemas/responseCreateOrderWithData"
           example:
-            Code: 200
-            Message: Success
+            code: 200
+            message: Success
     OrderResponseFailed:
       description: Bad Request
       content:
@@ -1133,13 +1276,13 @@ components:
           schema:
             $ref: "#/components/schemas/responseNonData"
           examples:
-            Invalid Id:
+            invalid Id:
               $ref: "#/components/examples/invalidId"
-            Access Forbidden:
+            access Forbidden:
               $ref: "#/components/examples/dataNotFound"
-            Data Not Found:
+            data Not Found:
               $ref: "#/components/examples/dataNotFound"
-            Bad Request:
+            bad Request:
               $ref: "#/components/examples/badRequest"
     getAllcartByIdGroupSuccess:
       description: Success Operation
@@ -1148,8 +1291,8 @@ components:
           schema:
             $ref: "#/components/schemas/responseOrderWithDataArray"
           example:
-            Code: 200
-            Data:
+            code: 200
+            data:
               [
                 {
                   OrderID: 1,
@@ -1168,7 +1311,7 @@ components:
                   DetailCredential: "Username: , Password: ",
                 },
               ]
-            Message: Success Operation
+            message: Success Operation
     getAllcartByIdUserSuccess:
       description: Success Operation
       content:
@@ -1176,8 +1319,8 @@ components:
           schema:
             $ref: "#/components/schemas/responseOrderWithDataArray"
           example:
-            Code: 200
-            Data:
+            code: 200
+            data:
               [
                 {
                   OrderID: 1,
@@ -1196,7 +1339,7 @@ components:
                   DetailCredential: "Username: , Password: ",
                 },
               ]
-            Message: Success Operation
+            message: Success Operation
     Updatecartsuccess:
       description: Success Operation
       content:
@@ -1204,8 +1347,8 @@ components:
           schema:
             $ref: "#/components/schemas/responseOrderWithData"
           example:
-            Code: 200
-            Message: success to update data
+            code: 200
+            message: success to update data
     UpdateCartFailed:
       description: Bad Request
       content:
@@ -1213,8 +1356,8 @@ components:
           schema:
             $ref: "#"
           example:
-            Code: 400
-            Message: failed to update data
+            code: 400
+            message: failed to update data
     UpdateOrderFailed:
       description: Bad Request
       content:
@@ -1222,99 +1365,99 @@ components:
           schema:
             $ref: "#/components/schemas/responseNonData"
           examples:
-            Details Can't Be Empty:
+            details Can't Be Empty:
               $ref: "#/components/examples/detailsCantBeEmpty"
-            Invalid Id:
+            invalid Id:
               $ref: "#/components/examples/invalidId"
-            Access Forbidden:
+            access Forbidden:
               $ref: "#/components/examples/dataNotFound"
-            Data Not Found:
+            data Not Found:
               $ref: "#/components/examples/dataNotFound"
-            Bad Request:
+            bad Request:
               $ref: "#/components/examples/badRequest"
   examples:
     accessIsDenied:
       value:
-        Code: 400
-        Message: Access is denied ID data is in the orderInvalid Id
+        code: 400
+        message: Access is denied ID data is in the orderInvalid Id
     accessForbidden:
       value:
-        Code: 400
-        Message: Access Forbidden
+        code: 400
+        message: Access Forbidden
     badRequest:
       value:
-        Code: 400
-        Message: Bad Request
+        code: 400
+        message: Bad Request
     cantConnecttoServer:
       value:
         Code: 500
         Message: Can't Connect to server
     dataisAvailable:
       value:
-        Code: 400
-        Message: Data is Available
+        code: 400
+        message: Data is Available
     dataNotFound:
       value:
-        Code: 400
-        Message: Data Not Found
+        code: 400
+        message: Data Not Found
     detailsCantBeEmpty:
       value:
-        Code: 400
-        Message: Details Can't Be Empty
+        code: 400
+        message: Details Can't Be Empty
     usernameOrPhoneNumberAlreadyExist:
       value:
-        Code: 400
-        Message: username or Telephone Number Already Exist
+        code: 400
+        message: username or Telephone Number Already Exist
     failedtoUploadFile:
       value:
-        Code: 500
-        Message: Failed to Upload File
+        code: 500
+        message: Failed to Upload File
     fileExtensionNotAllowed:
       value:
-        Code: 400
-        Message: File Extension Not Allowed
+        code: 400
+        message: File Extension Not Allowed
     
     idBooksNotFound:
       value:
-        Code: 400
-        Message: Id Books Not Found
+        code: 400
+        message: Id Books Not Found
     illegalFile:
       value:
-        Code: 400
-        Message: Illegal File
+        code: 400
+        message: Illegal File
     invalidPassword:
       value:
-        Code: 400
-        Message: Invalid Password
+        code: 400
+        message: Invalid Password
     invalidId:
       value:
-        Code: 400
-        Message: Invalid Id
+        code: 400
+        message: Invalid Id
     invalidFullname:
       value:
-        Code: 400
-        Message: Invalid Fullname
+        code: 400
+        message: Invalid Fullname
     invalidParam:
       value:
-        Code: 400
-        Message: Invalid Param
+        code: 400
+        message: Invalid Param
     invalidTelephoneNumber:
       value:
-        Code: 400
-        Message: Invalid Telephone Number
+        code: 400
+        message: Invalid Telephone Number
     invalidUsername:
       value:
-        Code: 400
-        Message: Invalid Username
+        code: 400
+        message: Invalid Username
     notAvailable:
       value:
-        Code: 400
-        Message: Not Available
+        code: 400
+        message: Not Available
     invalidPhone:
       value:
-        Code: 400
-        Message: Invalid Phone Number
+        code: 400
+        message: Invalid Phone Number
     sizeFileTooBig:
       value:
-        Code: 400
-        Message: Size File Too Big
+        code: 400
+        message: Size File Too Big

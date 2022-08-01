@@ -1,4 +1,4 @@
-name: Deploy to aws
+name: Deploy 
 on:
   push:
     branches:
@@ -17,7 +17,7 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd /home/ubuntu/BE-bookstore
+            cd /home/userbe10/BACK-END
             git pull origin main
             docker stop bookstoreContainer
             docker rm bookstoreContainer
