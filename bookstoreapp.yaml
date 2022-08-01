@@ -218,7 +218,7 @@ paths:
     get:
       tags:
         - Orders
-      summary: Get All Detail order by User Id
+      summary: Get All Order by User Id
       parameters:
         - $ref: "#/components/parameters/idParam"
       security:
@@ -228,36 +228,33 @@ paths:
           $ref: "#/components/responses/getorderbyidsuccess"
         "400":
           $ref: "#/components/responses/OrderResponseFailed"
-  /orders/{id}/confirm:
-    post:
+  /orders/all:
+    get:
       tags:
         - Orders
-      summary: Get Detail order by Id
-      parameters:
-        - $ref: "#/components/parameters/idParam"
+      summary: Get All Order
       security:
         - JWTAuth: []
-      requestBody:
-        $ref: "#/components/requestBodies/requestBodyConfirmOrder"
       responses:
         "200":
-          $ref: "#/components/responses/confirmordersuccess"
+          $ref: "#/components/responses/getallorder"
         "400":
           $ref: "#/components/responses/OrderResponseFailed"
-  /orders/{id}/cancel:
-    put:
+  /orders/delete:
+    delete:
       tags:
         - Orders
-      summary: Get Detail order by Id
+      summary: Delete order by id
       parameters:
         - $ref: "#/components/parameters/idParam"
       security:
         - JWTAuth: []
       responses:
         "200":
-          $ref: "#/components/responses/confirmordersuccess"
+          $ref: "#/components/responses/successOperationNonData"
         "400":
-          $ref: "#/components/responses/OrderResponseFailed"
+          $ref: "#/components/responses/deleteDataByIdFailed"
+    
 ####################################
 #  COMPONENTS
 ####################################
@@ -801,23 +798,11 @@ components:
           schema:
             $ref: "#/components/schemas/requestDataOrder"
           example:
-            cartid: [1]
-            address: {
-              receiver: "ana",
-              phone: "082302xxxx",
-            }
-        multipart/form-data:
-          schema:
-            $ref: "#/components/schemas/requestDataOrder"
-    requestBodyConfirmOrder:
-      required: false
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/requestDataOrder"
-          example:
-            paymentname: "shopeepay"
-            phone: "0819xx"
+            userid: 1
+            booksid: 
+              - 2
+              - 3
+            Message: Success
         multipart/form-data:
           schema:
             $ref: "#/components/schemas/requestDataOrder"
@@ -845,7 +830,7 @@ components:
               {
                 Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2Mzk2OTAwMjMsInJvbGUiOiJhZG1pbiIsInVzZXJJZCI6NH0.1Ij1ZVqpqPDOVXzaXyqcyNMlnbLTfwD28Byv0aWNjAQ,
               }
-            role: admin
+            role: user
             Message: Login Success
     loginFailed:
       description: Bad Request Response
@@ -1097,12 +1082,41 @@ components:
               {
                 ID: 1,
                 OrderID: 5,
+                InvoiceID: 1,
                 Title: "our story",
                 Price: 200000,
                 Qty: 1,
               }
             ]
             message: "success"
+    getallorder:
+      description: Success Operation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/responseOrderWithData"
+          example:
+            Code: 200
+            Data: [
+              {
+                ID: 1,
+                OrderID: 5,
+                InvoiceID: 1,
+                Title: "the legend",
+                Price: 200000,
+                Qty: 1,
+              },
+              {
+                ID: 2,
+                OrderID: 6,
+                InvoiceID: 1,
+                Title: "the Mouse",
+                Price: 200000,
+                Qty: 1,
+              }
+            ]
+            message: "success"
+    
     confirmordersuccess:
       description: Success
       content:

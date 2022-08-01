@@ -21,6 +21,9 @@ import (
 	ordersDelivery "bookstore/feature/orders/delivery"
 	ordersUsecase "bookstore/feature/orders/usecase"
 
+	route "bookstore/route"
+
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"gorm.io/gorm"
@@ -34,8 +37,10 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	e.Use(middleware.CORS())
 
 	userData := usersData.New(db)
-	useCase := usersUsecase.New(userData)
-	usersDelivery.New(e, useCase)
+	validator := validator.New()
+	useCase := usersUsecase.New(userData, validator)
+	userHandler := usersDelivery.New(useCase)
+	route.RouteUser(e, userHandler)
 
 	bookData := booksData.New(db)
 	BookuseCase := booksUsecase.New(bookData)
