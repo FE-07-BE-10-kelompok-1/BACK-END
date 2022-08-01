@@ -19,6 +19,6 @@ func main() {
 	factory.InitFactory(e, db)
 
 	fmt.Println("Menjalankan program...")
-	dsn := fmt.Sprintf(":%d", config.SERVERPORT)
+	dsn := fmt.Sprintf(":%d", 8000)
 	e.Logger.Fatal(e.Start(dsn))
 }
