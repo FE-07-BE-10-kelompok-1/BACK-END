@@ -6,6 +6,22 @@ type Cart struct {
 	Users_ID uint
 }
 
-type CartUsecase interface{}
+type JoinCartWithBooks struct {
+	ID       uint
+	Books_ID uint
+	Title    string
+	Price    string
+	Image    string
+}
 
-type CartData interface{}
+type CartUsecase interface {
+	AddToCart(data Cart) error
+	GetCarts(id uint) ([]JoinCartWithBooks, error)
+	DeleteFromCart(data Cart) error
+}
+
+type CartData interface {
+	Insert(data Cart) error
+	GetAll(id uint) ([]JoinCartWithBooks, error)
+	Delete(data Cart) error
+}
