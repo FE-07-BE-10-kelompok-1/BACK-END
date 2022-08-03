@@ -537,7 +537,7 @@ components:
               type: string
             role:
               type: string
-        Message:
+        message:
           type: string
     responseUserWithData:
       type: object
@@ -869,7 +869,6 @@ components:
                 fullname: rizunadifa
                 username: difa
                 phone: "08966066096"
-                password: "123"
         multipart/form-data:
           schema:
             $ref: "#/components/schemas/requestDataUser"
@@ -970,7 +969,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseNonData"
           example:
-            Message: Success Operation
+            message: Success Operation
     createUserFailed:
       description: Bad Request Response
       content:
@@ -1006,7 +1005,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseUserWithData"
           example:
-            data: { ID: 1, Fullname: cha eun woo, Username: chaeunwoo, Phone: "081936665965", Password: "123" }
+            data: { id: 1, fullname: cha eun woo, username: chaeunwoo, phone: "081936665965", password: "123" }
             message: Success Operation
     getDataByIdFailed:
       description: Bad Request Response
@@ -1149,7 +1148,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseCreateOrderWithData"
           example:
-            Message: Success
+            message: success
     createOrderFailed:
       description: Bad Request
       content:
@@ -1197,12 +1196,12 @@ components:
           example:
             data: [
               {
-                ID: 1,
-                OrderID: 5,
-                InvoiceID: 1,
-                Title: "our story",
-                Price: 200000,
-                Qty: 1,
+                id: 1,
+                order_id: 5,
+                invoice_id: 1,
+                title: "our story",
+                price: 200000,
+                qty: 1,
               }
             ]
             message: "success"
@@ -1215,20 +1214,20 @@ components:
           example:
             data: [
               {
-                ID: 1,
-                OrderID: 5,
-                InvoiceID: 1,
-                Title: "the legend",
-                Price: 200000,
-                Qty: 1,
+                id: 1,
+                order_id: 5,
+                invoice_id: 1,
+                title: "the legend",
+                price: 200000,
+                qty: 1,
               },
               {
-                ID: 2,
-                OrderID: 6,
-                InvoiceID: 1,
-                Title: "the Mouse",
-                Price: 200000,
-                Qty: 1,
+                id: 2,
+                order_id: 6,
+                invoice_id: 1,
+                title: "the Mouse",
+                price: 200000,
+                qty: 1,
               }
             ]
             message: "success"
@@ -1355,7 +1354,7 @@ components:
         message: Bad Request
     cantConnecttoServer:
       value:
-        Message: Can't Connect to server
+        message: Can't Connect to server
     dataisAvailable:
       value:
         message: Data is Available
@@ -1367,7 +1366,7 @@ components:
         message: Details Can't Be Empty
     usernameOrPhoneNumberAlreadyExist:
       value:
-        message: username or Telephone Number Already Exist
+        message: Username or Telephone Number Already Exist
     failedtoUploadFile:
       value:
         message: Failed to Upload File
