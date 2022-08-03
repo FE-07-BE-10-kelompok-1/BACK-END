@@ -40,7 +40,6 @@ func (uh *userHandler) InsertUser() echo.HandlerFunc {
 		return c.JSON(http.StatusCreated, map[string]interface{}{
 			"message": "success create data",
 			"data":    data,
-			"token":   common.GenerateToken(int(data.ID)),
 		})
 	}
 }
@@ -62,8 +61,9 @@ func (uh *userHandler) LoginHandler() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, "username or password incorrect")
 		}
 		return c.JSON(http.StatusOK, map[string]interface{}{
-			"message": "success login",
 			"token":   common.GenerateToken(int(data.ID)),
+			"role":    data.Role,
+			"message": "success login",
 		})
 	}
 }

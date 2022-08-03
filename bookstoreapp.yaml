@@ -52,7 +52,7 @@ paths:
               schema:
                 type: string
               example:
-                code: 500
+                
                 message: internal server error
   ####################################
   #  SIGN UP
@@ -76,16 +76,16 @@ paths:
               schema:
                 type: string
               example:
-                code: 500
+                
                 message: internal server error
   ####################################
   #  USERS
   ####################################
-  /users/id:
+  /users:
     get:
       tags:
         - Users
-      summary: Get user's data by id
+      summary: Get users data (Get Profile)
       security:
         - JWTAuth: []
       responses:
@@ -100,13 +100,12 @@ paths:
               schema:
                 type: string
               example:
-                code: 500
+                
                 message: internal server error
-  /users:
     put:
       tags:
         - Users
-      summary: Edit user's data by id
+      summary: Edit users data (Edit Profile)
       security:
         - JWTAuth: []
       requestBody:
@@ -123,12 +122,12 @@ paths:
               schema:
                 type: string
               example:
-                code: 500
+                
                 message: internal server error
     delete:
       tags:
         - Users
-      summary: Delete user's data by id
+      summary: Delete users (Delete Profile)
       security:
         - JWTAuth: []
       responses:
@@ -143,7 +142,7 @@ paths:
               schema:
                 type: string
               example:
-                code: 500
+                
                 message: internal server error
   ####################################
   #  BOOKS
@@ -169,7 +168,7 @@ paths:
               schema:
                 type: string
               example:
-                code: 500
+                
                 message: internal server error
     get:
       tags:
@@ -187,7 +186,7 @@ paths:
               schema:
                 type: string
               example:
-                code: 500
+                
                 message: internal server error
   /books/{id}:
     get:
@@ -208,7 +207,7 @@ paths:
               schema:
                 type: string
               example:
-                code: 500
+                
                 message: internal server error
     put:
       tags:
@@ -232,7 +231,7 @@ paths:
               schema:
                 type: string
               example:
-                code: 500
+                
                 message: internal server error
     delete:
       tags:
@@ -254,7 +253,7 @@ paths:
               schema:
                 type: string
               example:
-                code: 500
+                
                 message: internal server error
   ####################################
   #  CART
@@ -280,8 +279,43 @@ paths:
               schema:
                 type: string
               example:
-                code: 500
+                
                 message: internal server error
+    get:
+      summary: Get My Carts
+      security:
+        - JWTAuth: []
+      tags:
+        - "Carts"
+      responses:
+        "200":
+          description: Get My Carts
+          content:
+            application/json:
+              example:
+                message: success get my carts
+                data: 
+                  - id: 1
+                    books_id: 1
+                    title: yahaha
+                    image: "url.com"
+                    price: 20000
+                  - id: 2
+                    books_id: 2
+                    title: yahaha2
+                    image: "url.com2"
+                    price: 20000
+
+        "500":
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                message: internal server error
+            
+  /carts/id:
     delete:
       tags:
         - Carts
@@ -302,9 +336,7 @@ paths:
               schema:
                 type: string
               example:
-                code: 500
                 message: internal server error
-
   ####################################
   #  ORDERS
   ####################################
@@ -329,7 +361,7 @@ paths:
               schema:
                 type: string
               example:
-                code: 500
+                
                 message: internal server error
   /orders/{id}:
     get:
@@ -352,7 +384,7 @@ paths:
               schema:
                 type: string
               example:
-                code: 500
+                
                 message: internal server error
   /orders/all:
     get:
@@ -373,7 +405,7 @@ paths:
               schema:
                 type: string
               example:
-                code: 500
+                
                 message: internal server error
   /orders/delete:
     delete:
@@ -396,7 +428,7 @@ paths:
               schema:
                 type: string
               example:
-                code: 500
+                
                 message: internal server error
     
 ####################################
@@ -457,23 +489,7 @@ components:
     
     requestDataBooks:
       type: object
-      required:
-        - file
-        - images
-        - title
-        - price
-        - stock
-        - author
-        - sinopsis
       properties:
-        images:
-          type: string
-          format: binary
-          description: "upload book image"
-        file:
-          type: string
-          format: binary
-          description: "upload book file"
         title:
           type: string
           description: "input title book here"
@@ -497,7 +513,7 @@ components:
         - price
         - stock
         - file
-        - images
+        - image
       properties:
         name_books:
           type: string
@@ -615,7 +631,7 @@ components:
             url:
               type: string
             userid:
-              type: int
+              type: integer
         message:
           type: string
     responseBooksWithDataArray:
@@ -642,7 +658,7 @@ components:
               url:
                 type: string
               userid:
-                type: int
+                type: integer
         message:
           type: string
     responseGroupBooksWithData:
@@ -914,7 +930,7 @@ components:
             stock: 5
             author: sejeong kim
             sinopsis: pada jaman dahulu kala
-            images: photo.jpg
+            image: photo.jpg
             file: file.pdf
             
     requestBodyBooksUpdate:
@@ -932,7 +948,7 @@ components:
             stock: 5
             author: sejeong kim
             sinopsis: pada jaman dahulu kala
-            images: photo.jpg
+            image: photo.jpg
             file: file.pdf
     requestBodyOrder:
       required: true
@@ -968,7 +984,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseLoginWithData"
           example:
-            Code: 200
+            
             Data:
               {
                 Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2Mzk2OTAwMjMsInJvbGUiOiJhZG1pbiIsInVzZXJJZCI6NH0.1Ij1ZVqpqPDOVXzaXyqcyNMlnbLTfwD28Byv0aWNjAQ,
@@ -982,7 +998,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseNonData"
           example:
-            code: 400
+            
             message: Username or Password Incorrect
     successOperationNonData:
       description: Success Response Non Data
@@ -991,7 +1007,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseNonData"
           example:
-            Code: 200
+            
             Message: Success Operation
     createUserFailed:
       description: Bad Request Response
@@ -1028,7 +1044,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseUserWithData"
           example:
-            code: 200
+            
             data: { ID: 1, Fullname: cha eun woo, Username: chaeunwoo, Phone: "081936665965", Password: "123" }
             message: Success Operation
     getDataByIdFailed:
@@ -1110,7 +1126,8 @@ components:
                 {
                   id: 3,
                   title: The Rain,
-                  images: https://storage.googleapis.com/Book-store/TheRain.jpg,
+                  image: "https://storage.googleapis.com/Book-store/TheRain.jpg",
+                  file: "url.com",
                   stock: 6,
                   price: 300000,
                   author: suzy,
@@ -1120,7 +1137,8 @@ components:
                 {
                   id: 4,
                   title: The Moon,
-                  images: https://storage.googleapis.com/Book-store/theRain.jpg,
+                  image: "https://storage.googleapis.com/Book-store/TheRain.jpg",
+                  file: "url.com",
                   stock: 4,
                   price: 200000,
                   author: difa,
@@ -1138,12 +1156,13 @@ components:
             data:
               {
                 id: 3,
-                  title: The Rain,
-                  images: TheRain.jpg,
-                  url: https://storage.googleapis.com/Book-store/TheRain.jpg,
-                  stock: 6,
-                  price: 300000,
-                  userid: 1,
+                title: The Rain,
+                image: "https://storage.googleapis.com/Book-store/TheRain.jpg",
+                file: "url.com",
+                stock: 6,
+                price: 300000,
+                author: suzy,
+                sinopsis: once upon a time,
               }
             message: Success
     updateBooksFailed:
@@ -1172,7 +1191,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseCreateOrderWithData"
           example:
-            Code: 200
+            
             Message: Success
     createOrderFailed:
       description: Bad Request
@@ -1194,20 +1213,20 @@ components:
           schema:
             $ref: "#/components/schemas/responseOrderWithData"
           example:
-            Code: 200
+            
             Data:
               [
                 {
                   UserID: 15,
                   NameBooks: Netflix,
-                  Image: https://img.io/1,
+                  Image: "https://img.io/1",
                   PriceOrder: 1254,
                   Qty: 1,
                 },
                 {
                   UserID: 15,
                   NameBooks: Youtube Premium,
-                  Image: https://img.io/2,
+                  Image: "https://img.io/2",
                   PriceOrder: 4321,
                   Qty: 1,
                 },
@@ -1220,7 +1239,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseOrderWithData"
           example:
-            code: 200
+            
             data: [
               {
                 ID: 1,
@@ -1239,7 +1258,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseOrderWithData"
           example:
-            code: 200
+            
             data: [
               {
                 ID: 1,
@@ -1267,7 +1286,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseCreateOrderWithData"
           example:
-            code: 200
+            
             message: Success
     OrderResponseFailed:
       description: Bad Request
@@ -1291,7 +1310,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseOrderWithDataArray"
           example:
-            code: 200
+            
             data:
               [
                 {
@@ -1319,7 +1338,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseOrderWithDataArray"
           example:
-            code: 200
+            
             data:
               [
                 {
@@ -1347,7 +1366,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseOrderWithData"
           example:
-            code: 200
+            
             message: success to update data
     UpdateCartFailed:
       description: Bad Request
@@ -1356,7 +1375,7 @@ components:
           schema:
             $ref: "#"
           example:
-            code: 400
+            
             message: failed to update data
     UpdateOrderFailed:
       description: Bad Request
@@ -1378,86 +1397,86 @@ components:
   examples:
     accessIsDenied:
       value:
-        code: 400
+        
         message: Access is denied ID data is in the orderInvalid Id
     accessForbidden:
       value:
-        code: 400
+        
         message: Access Forbidden
     badRequest:
       value:
-        code: 400
+        
         message: Bad Request
     cantConnecttoServer:
       value:
-        Code: 500
+        
         Message: Can't Connect to server
     dataisAvailable:
       value:
-        code: 400
+        
         message: Data is Available
     dataNotFound:
       value:
-        code: 400
+        
         message: Data Not Found
     detailsCantBeEmpty:
       value:
-        code: 400
+        
         message: Details Can't Be Empty
     usernameOrPhoneNumberAlreadyExist:
       value:
-        code: 400
+        
         message: username or Telephone Number Already Exist
     failedtoUploadFile:
       value:
-        code: 500
+        
         message: Failed to Upload File
     fileExtensionNotAllowed:
       value:
-        code: 400
+        
         message: File Extension Not Allowed
     
     idBooksNotFound:
       value:
-        code: 400
+        
         message: Id Books Not Found
     illegalFile:
       value:
-        code: 400
+        
         message: Illegal File
     invalidPassword:
       value:
-        code: 400
+        
         message: Invalid Password
     invalidId:
       value:
-        code: 400
+        
         message: Invalid Id
     invalidFullname:
       value:
-        code: 400
+        
         message: Invalid Fullname
     invalidParam:
       value:
-        code: 400
+        
         message: Invalid Param
     invalidTelephoneNumber:
       value:
-        code: 400
+        
         message: Invalid Telephone Number
     invalidUsername:
       value:
-        code: 400
+        
         message: Invalid Username
     notAvailable:
       value:
-        code: 400
+        
         message: Not Available
     invalidPhone:
       value:
-        code: 400
+        
         message: Invalid Phone Number
     sizeFileTooBig:
       value:
-        code: 400
+        
         message: Size File Too Big
