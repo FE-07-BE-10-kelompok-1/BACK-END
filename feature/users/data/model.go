@@ -10,10 +10,10 @@ import (
 
 type User struct {
 	gorm.Model
-	Fullname string
-	Username string `gorm:"unique"`
-	Phone    string `gorm:"unique"`
-	Password string
+	Fullname string          `gorm:"not null"`
+	Username string          `gorm:"unique;not null"`
+	Phone    string          `gorm:"unique;not null"`
+	Password string          `gorm:"not null"`
 	Role     string          `gorm:"default:user"`
 	Carts    []cartData.Cart `gorm:"foreignKey:Users_ID"`
 	Invoices []data.Invoice  `gorm:"foreignKey:Users_ID"`
