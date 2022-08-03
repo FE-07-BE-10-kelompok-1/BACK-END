@@ -23,23 +23,25 @@ func New(us domain.UserUsecase) domain.UserHandler {
 func (uh *userHandler) InsertUser() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var tmp InsertFormat
-		err := c.Bind(&tmp)
+		errBind := c.Bind(&tmp)
 
-		if err != nil {
-			log.Println("Cannot parse data", err)
-			c.JSON(http.StatusBadRequest, "error read input")
+		if errBind != nil {
+			log.Println("Cannot parse data", errBind)
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    500,
+				"message": "internal server error",
+			})
 		}
 
-		data, err := uh.userUsecase.AddUser(tmp.ToModel())
-
+		_, err := uh.userUsecase.AddUser(tmp.ToModel())
 		if err != nil {
 			log.Println("Cannot proces data", err)
-			c.JSON(http.StatusInternalServerError, err)
+			return c.JSON(http.StatusBadRequest, err.Error())
 		}
 
 		return c.JSON(http.StatusCreated, map[string]interface{}{
-			"message": "success create data",
-			"data":    data,
+			"code":    201,
+			"message": "success operation",
 		})
 	}
 }
@@ -50,17 +52,27 @@ func (uh *userHandler) LoginHandler() echo.HandlerFunc {
 		err := c.Bind(&userLogin)
 		if err != nil {
 			log.Println("Cannot parse data", err)
-			return c.JSON(http.StatusBadRequest, "cannot read input")
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    400,
+				"message": "cannot read input",
+			})
 		}
 		row, data, e := uh.userUsecase.LoginUser(userLogin.LoginToModel())
 		if e != nil {
 			log.Println("Cannot proces data", err)
-			return c.JSON(http.StatusBadRequest, "username or password incorrect")
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    400,
+				"message": "username or password incorrect",
+			})
 		}
 		if row == -1 {
-			return c.JSON(http.StatusBadRequest, "username or password incorrect")
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    400,
+				"message": "cannot read input",
+			})
 		}
 		return c.JSON(http.StatusOK, map[string]interface{}{
+			"code":    200,
 			"token":   common.GenerateToken(int(data.ID)),
 			"role":    data.Role,
 			"message": "success login",
@@ -71,38 +83,23 @@ func (uh *userHandler) LoginHandler() echo.HandlerFunc {
 func (uh *userHandler) UpdateUser() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
-		var tmp InsertFormat
+		var tmp UpdateFormat
 		result := c.Bind(&tmp)
-
-		qry := map[string]interface{}{}
 		idUpdate := common.ExtractData(c)
-
 		if result != nil {
 			log.Println(result, "Cannot parse input to object")
 			return c.JSON(http.StatusInternalServerError, "Error read update")
 		}
 
-		if tmp.Fullname != "" {
-			qry["fullname"] = tmp.Fullname
-		}
-		if tmp.Username != "" {
-			qry["username"] = tmp.Username
-		}
-		if tmp.Phone != "" {
-			qry["phone"] = tmp.Phone
-		}
-		if tmp.Password != "" {
-			qry["password"] = tmp.Password
-		}
-		data, err := uh.userUsecase.UpdateUser(idUpdate, tmp.ToModel())
+		_, err := uh.userUsecase.UpdateUser(idUpdate, tmp.UpdateToModel())
 
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, "cannot update")
+			return c.JSON(http.StatusBadRequest, err.Error())
 		}
 
-		return c.JSON(http.StatusCreated, map[string]interface{}{
-			"message": "Success update data",
-			"data":    data,
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"code":    200,
+			"message": "success operation",
 		})
 	}
 }
@@ -115,14 +112,22 @@ func (uh *userHandler) GetProfile() echo.HandlerFunc {
 
 		if err != nil {
 			if strings.Contains(err.Error(), "not found") {
-				return c.JSON(http.StatusNotFound, err.Error())
+				return c.JSON(http.StatusNotFound, map[string]interface{}{
+					"code":    400,
+					"message": "data not found",
+				})
 			} else {
 				return c.JSON(http.StatusInternalServerError, err.Error())
 			}
 		}
 		return c.JSON(http.StatusFound, map[string]interface{}{
-			"message": "data found",
-			"data":    data,
+			"code":     200,
+			"id":       data.ID,
+			"fullname": data.Fullname,
+			"username": data.Username,
+			"phone":    data.Phone,
+			"password": data.Password,
+			"message":  "Success Operation",
 		})
 	}
 }
@@ -135,8 +140,14 @@ func (uh *userHandler) DeleteUser() echo.HandlerFunc {
 		}
 		_, errDel := uh.userUsecase.DeleteUser(id)
 		if errDel != nil {
-			return c.JSON(http.StatusInternalServerError, "cannot delete user")
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    500,
+				"message": "internal server error",
+			})
 		}
-		return c.JSON(http.StatusOK, "success to delete user")
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"code":    200,
+			"message": "Success Operation",
+		})
 	}
 }
