@@ -61,11 +61,6 @@ func (uh *userHandler) LoginHandler() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, "username or password incorrect")
 		}
 		return c.JSON(http.StatusOK, map[string]interface{}{
-<<<<<<< HEAD
-			"message": "success login",
-			"role":    data.Role,
-=======
->>>>>>> 6835a4be35c509d5df193f6ae054588d4bf745d1
 			"token":   common.GenerateToken(int(data.ID)),
 			"role":    data.Role,
 			"message": "success login",
