@@ -27,6 +27,8 @@ tags:
     description: Endpoint for perform operations on books
   - name: Carts
     description: Endpoint for perform operations on cart
+  - name: Checkout
+    description: Endpoint for perform operations on Checkout
   - name: Orders
     description: Endpoint for perform operations on order
 paths:
@@ -341,20 +343,28 @@ paths:
   ####################################
   #  ORDERS
   ####################################
-  /orders:
-    post:
+  /checkout:
+    post: 
       tags:
-        - Orders
-      summary: Create a new order
+        - "Checkout"
       security:
         - JWTAuth: []
       requestBody:
         $ref: "#/components/requestBodies/requestBodyOrder"
       responses:
         "200":
-          $ref: "#/components/responses/createcartsuccess"
+          description: success Checkout
+          content:
+            application/json:
+              example:
+                token: "1ihuebwjhbshcxascas"
+                redirect_url: "https://app.sandbox.midtrans.com/snap/v3/redirection/5b875658-8d2c-40ca-82ed-56bdba6939df"
         "400":
-          $ref: "#/components/responses/createOrderFailed"
+          description: bad request
+          content:
+            application/json:
+              example: 
+                message: bad request
         "500":
           description: Internal server Error
           content:
@@ -362,13 +372,12 @@ paths:
               schema:
                 type: string
               example:
-                
                 message: internal server error
-  /orders/{id}:
+  /orders:
     get:
       tags:
         - Orders
-      summary: Get All Order by User Id
+      summary: Get All Orders (if role =admin all, if role=user all that user orders)
       parameters:
         - $ref: "#/components/parameters/idParam"
       security:
@@ -378,50 +387,6 @@ paths:
           $ref: "#/components/responses/getorderbyidsuccess"
         "400":
           $ref: "#/components/responses/OrderResponseFailed"
-        "500":
-          description: Internal server Error
-          content:
-            application/json:
-              schema:
-                type: string
-              example:
-                
-                message: internal server error
-  /orders/all:
-    get:
-      tags:
-        - Orders
-      summary: Get All Order
-      security:
-        - JWTAuth: []
-      responses:
-        "200":
-          $ref: "#/components/responses/getallorder"
-        "400":
-          $ref: "#/components/responses/OrderResponseFailed"
-        "500":
-          description: Internal server Error
-          content:
-            application/json:
-              schema:
-                type: string
-              example:
-                
-                message: internal server error
-  /orders/delete:
-    delete:
-      tags:
-        - Orders
-      summary: Delete order by id
-      parameters:
-        - $ref: "#/components/parameters/idParam"
-      security:
-        - JWTAuth: []
-      responses:
-        "200":
-          $ref: "#/components/responses/successOperationNonData"
-        "400":
-          $ref: "#/components/responses/deleteDataByIdFailed"
         "500":
           description: Internal server Error
           content:
@@ -538,15 +503,7 @@ components:
           description: "upload image"
     ###
     requestDataOrder:
-      type: object
-      required:
-        - paymentname
-        - phone
-      properties:
-        paymentname:
-          type: string
-        phone:
-          type: string
+      type: array
     requestDataOrderUpdate:
       type: object
       required:
@@ -956,11 +913,9 @@ components:
           schema:
             $ref: "#/components/schemas/requestDataOrder"
           example:
-            userid: 1
-            booksid: 
+            books_id: 
               - 2
               - 3
-            message: Success
         multipart/form-data:
           schema:
             $ref: "#/components/schemas/requestDataOrder"
