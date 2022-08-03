@@ -10,7 +10,7 @@ type JoinCartWithBooks struct {
 	ID       uint
 	Books_ID uint
 	Title    string
-	Price    string
+	Price    uint
 	Image    string
 }
 

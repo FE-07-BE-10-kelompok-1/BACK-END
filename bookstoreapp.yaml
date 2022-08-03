@@ -14,7 +14,7 @@ servers:
   # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/bookstore_group1/bookstore/1.0.0
-  - url: 34.238.252.143:8000
+  - url: http://34.143.186.209:9000
     description: Base URL that will be used for endpoints
 tags:
   - name: Login
@@ -305,6 +305,7 @@ paths:
                     title: yahaha2
                     image: "url.com2"
                     price: 20000
+                total: 40000
 
         "500":
           description: Internal server Error
@@ -913,8 +914,6 @@ components:
             $ref: "#"
           example:
             books_id: 1
-            quantity: 1
-            price: 100000
     requestBodyBooks:
       required: true
       content:
