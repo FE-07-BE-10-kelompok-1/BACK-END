@@ -9,7 +9,7 @@ type InsertFormat struct {
 	Password string `json:"password" form:"password" validate:"required"`
 }
 
-func (i *InsertFormat) ToModel() domain.User {
+func (i InsertFormat) ToModel() domain.User {
 	return domain.User{
 		Fullname: i.Fullname,
 		Username: i.Username,

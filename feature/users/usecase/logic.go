@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"bookstore/domain"
-	"bookstore/feature/users/data"
+	delivery "bookstore/feature/users/delivery"
 	"errors"
 	"log"
 
@@ -23,27 +23,32 @@ func New(ud domain.UserData, v *validator.Validate) domain.UserUsecase {
 	}
 }
 
-func (ud *userUsecase) AddUser(newUser domain.User) (domain.User, error) {
-	var cnv = data.FromModel(newUser)
-	err := ud.validate.Struct(cnv)
-	if err != nil {
-		log.Println("Validation error : ", err.Error())
-		return domain.User{}, err
+func (ud *userUsecase) AddUser(newUser domain.User) (row int, err error) {
+
+	if newUser.Fullname == "" {
+		return -1, errors.New("invalid fullname")
 	}
+	if newUser.Username == "" {
+		return -1, errors.New("invalid username")
+	}
+	if newUser.Password == "" {
+		return -1, errors.New("invalid password")
+	}
+	if newUser.Phone == "" {
+		return -1, errors.New("invalid phone number")
+	}
+
 	hashed, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
 	if err != nil {
 		log.Println("error encrypt password", err)
-		return domain.User{}, err
+		return -3, err
 	}
 	newUser.Password = string(hashed)
 	inserted, err := ud.userData.Insert(newUser)
 
 	if err != nil {
 		log.Println("error from usecase", err.Error())
-		return domain.User{}, err
-	}
-	if inserted.ID == 0 {
-		return domain.User{}, errors.New("cannot insert data")
+		return -4, err
 	}
 	return inserted, nil
 }
@@ -54,22 +59,35 @@ func (ud *userUsecase) LoginUser(userLogin domain.User) (response int, data doma
 	return response, data, err
 }
 
-func (ud *userUsecase) UpdateUser(id int, updateProfile domain.User) (domain.User, error) {
-	if id == -1 {
-		return domain.User{}, errors.New("invalid user")
+func (ud *userUsecase) UpdateUser(id int, updateProfile domain.User) (row int, err error) {
+	var tmp delivery.UpdateFormat
+	qry := map[string]interface{}{}
+	if tmp.Fullname != "" {
+		qry["fullname"] = &tmp.Fullname
 	}
-	hashed, err := bcrypt.GenerateFromPassword([]byte(updateProfile.Password), bcrypt.DefaultCost)
+	if tmp.Username != "" {
+		qry["username"] = &tmp.Username
+	}
+	if tmp.Phone != "" {
+		qry["phone"] = &tmp.Phone
+	}
 
+	if id == -1 {
+		return 0, errors.New("invalid user")
+	}
+
+	hashed, err := bcrypt.GenerateFromPassword([]byte(updateProfile.Password), bcrypt.DefaultCost)
 	if err != nil {
 		log.Println("error encrypt password", err)
-		return domain.User{}, err
+		return 0, err
 	}
-	updateProfile.Password = string(hashed)
-	result := ud.userData.Update(id, updateProfile)
 
-	if result.ID == 0 {
-		return domain.User{}, errors.New("error update user")
+	updateProfile.Password = string(hashed)
+	result, err := ud.userData.Update(id, updateProfile)
+	if err != nil {
+		return 0, errors.New("username or phone number already exist")
 	}
+
 	return result, nil
 }
 

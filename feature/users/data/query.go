@@ -2,6 +2,7 @@ package data
 
 import (
 	"bookstore/domain"
+	"errors"
 	"fmt"
 	"log"
 
@@ -19,14 +20,17 @@ func New(DB *gorm.DB) domain.UserData {
 	}
 }
 
-func (ud *userData) Insert(newUser domain.User) (domain.User, error) {
+func (ud *userData) Insert(newUser domain.User) (row int, err error) {
 	var cnv = FromModel(newUser)
-	err := ud.db.Create(&cnv).Error
-	if err != nil {
-		log.Println("Cannot create object", err.Error())
-		return domain.User{}, err
+	result := ud.db.Create(&cnv)
+	if result.Error != nil {
+		log.Println("Cannot create object", errors.New("error db"))
+		return -1, errors.New("username or number phone already exist")
 	}
-	return cnv.ToModel(), nil
+	if result.RowsAffected == 0 {
+		return 0, errors.New("failed insert data")
+	}
+	return int(result.RowsAffected), nil
 }
 
 func (ud *userData) Login(userLogin domain.User) (row int, data domain.User, err error) {
@@ -52,15 +56,19 @@ func (ud *userData) Login(userLogin domain.User) (row int, data domain.User, err
 	return int(result.RowsAffected), dataUser.ToModel(), nil
 }
 
-func (ud *userData) Update(userID int, updatedData domain.User) domain.User {
+func (ud *userData) Update(userID int, updatedData domain.User) (row int, err error) {
 	var cnv = FromModel(updatedData)
-	err := ud.db.Model(&User{}).Where("ID = ?", userID).Updates(cnv).Error
-	if err != nil {
-		log.Println("Cannot update data", err.Error())
-		return domain.User{}
-	}
 	cnv.ID = uint(userID)
-	return cnv.ToModel()
+	result := ud.db.Model(&User{}).Where("ID = ?", userID).Updates(cnv)
+	if result.Error != nil {
+		log.Println("Cannot update data", errors.New("error db"))
+		return -1, errors.New("username or number phone already exist")
+	}
+	if result.RowsAffected == 0 {
+		return -2, errors.New("failed update data")
+	}
+
+	return int(result.RowsAffected), nil
 }
 
 func (ud *userData) GetSpecific(userID int) (domain.User, error) {
@@ -68,7 +76,7 @@ func (ud *userData) GetSpecific(userID int) (domain.User, error) {
 	err := ud.db.Where("ID = ?", userID).First(&tmp).Error
 	if err != nil {
 		log.Println("There is a problem with data", err.Error())
-		return domain.User{}, err
+		return domain.User{}, errors.New("data not found")
 	}
 
 	return tmp.ToModel(), nil

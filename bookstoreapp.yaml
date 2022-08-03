@@ -52,6 +52,7 @@ paths:
               schema:
                 type: string
               example:
+                code: 500
                 message: internal server error
   ####################################
   #  SIGN UP
@@ -75,6 +76,7 @@ paths:
               schema:
                 type: string
               example:
+                code: 500 
                 message: internal server error
   ####################################
   #  USERS
@@ -98,6 +100,7 @@ paths:
               schema:
                 type: string
               example:
+                code: 500
                 message: internal server error
     put:
       tags:
@@ -119,6 +122,7 @@ paths:
               schema:
                 type: string
               example:
+                code: 500
                 message: internal server error
     delete:
       tags:
@@ -138,6 +142,7 @@ paths:
               schema:
                 type: string
               example:
+                code: 500
                 message: internal server error
   ####################################
   #  BOOKS
@@ -163,6 +168,7 @@ paths:
               schema:
                 type: string
               example:
+                code: 500
                 message: internal server error
     get:
       tags:
@@ -180,6 +186,7 @@ paths:
               schema:
                 type: string
               example:
+                code: 500
                 message: internal server error
   /books/{id}:
     get:
@@ -200,6 +207,7 @@ paths:
               schema:
                 type: string
               example:
+                code: 500
                 message: internal server error
     put:
       tags:
@@ -223,6 +231,7 @@ paths:
               schema:
                 type: string
               example:
+                code: 500
                 message: internal server error
     delete:
       tags:
@@ -244,6 +253,7 @@ paths:
               schema:
                 type: string
               example:
+                code: 500
                 message: internal server error
   ####################################
   #  CART
@@ -269,6 +279,7 @@ paths:
               schema:
                 type: string
               example:
+                code: 500
                 message: internal server error
     get:
       summary: Get My Carts
@@ -282,6 +293,7 @@ paths:
           content:
             application/json:
               example:
+                code: 200
                 message: success get my carts
                 data: 
                   - id: 1
@@ -303,6 +315,7 @@ paths:
               schema:
                 type: string
               example:
+                code: 500
                 message: internal server error
             
   /carts/id:
@@ -326,6 +339,7 @@ paths:
               schema:
                 type: string
               example:
+                code: 500
                 message: internal server error
   ####################################
   #  ORDERS
@@ -351,6 +365,7 @@ paths:
               schema:
                 type: string
               example:
+                code: 500
                 message: internal server error
   /orders/{id}:
     get:
@@ -373,6 +388,7 @@ paths:
               schema:
                 type: string
               example:
+                code: 500
                 message: internal server error
   /orders/all:
     get:
@@ -393,6 +409,7 @@ paths:
               schema:
                 type: string
               example:
+                code: 500
                 message: internal server error
   /orders/delete:
     delete:
@@ -415,6 +432,7 @@ paths:
               schema:
                 type: string
               example:
+                code: 500
                 message: internal server error
     
 ####################################
@@ -555,7 +573,7 @@ components:
               type: string
             role:
               type: string
-        message:
+        Message:
           type: string
     responseUserWithData:
       type: object
@@ -675,7 +693,7 @@ components:
               type: string
             name_Books:
               type: string
-            Status:
+            status:
               type: string
             url:
               type: string
@@ -887,6 +905,7 @@ components:
                 fullname: rizunadifa
                 username: difa
                 phone: "08966066096"
+                password: "123"
         multipart/form-data:
           schema:
             $ref: "#/components/schemas/requestDataUser"
@@ -967,7 +986,11 @@ components:
           schema:
             $ref: "#/components/schemas/responseLoginWithData"
           example:
-            token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2Mzk2OTAwMjMsInJvbGUiOiJhZG1pbiIsInVzZXJJZCI6NH0.1Ij1ZVqpqPDOVXzaXyqcyNMlnbLTfwD28Byv0aWNjAQ,
+            code: 200
+            data:
+              {
+                token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2Mzk2OTAwMjMsInJvbGUiOiJhZG1pbiIsInVzZXJJZCI6NH0.1Ij1ZVqpqPDOVXzaXyqcyNMlnbLTfwD28Byv0aWNjAQ,
+              }
             role: user
             message: Login Success
     loginFailed:
@@ -977,6 +1000,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseNonData"
           example:
+            code: 400
             message: Username or Password Incorrect
     successOperationNonData:
       description: Success Response Non Data
@@ -985,6 +1009,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseNonData"
           example:
+            code: 200
             message: Success Operation
     createUserFailed:
       description: Bad Request Response
@@ -1021,6 +1046,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseUserWithData"
           example:
+            code: 200
             data: { id: 1, fullname: cha eun woo, username: chaeunwoo, phone: "081936665965", password: "123" }
             message: Success Operation
     getDataByIdFailed:
@@ -1043,20 +1069,20 @@ components:
           schema:
             $ref: "#/components/schemas/responseNonData"
           examples:
-            invalid Id:
-              $ref: "#/components/examples/invalidId"
-            data Not Found:
-              $ref: "#/components/examples/dataNotFound"
-            access Forbidden:
-              $ref: "#/components/examples/accessForbidden"
-            invalid Fullname:
-              $ref: "#/components/examples/invalidFullname"
-            invalid Username:
-              $ref: "#/components/examples/invalidUsername"
-            invalid Password:
-              $ref: "#/components/examples/invalidPassword"
-            invalid Phone:
-              $ref: "#/components/examples/invalidPhone"
+            # invalid Id:
+            #   $ref: "#/components/examples/invalidId"
+            # data Not Found:
+            #   $ref: "#/components/examples/dataNotFound"
+            # access Forbidden:
+            #   $ref: "#/components/examples/accessForbidden"
+            # invalid Fullname:
+            #   $ref: "#/components/examples/invalidFullname"
+            # invalid Username:
+            #   $ref: "#/components/examples/invalidUsername"
+            # invalid Password:
+            #   $ref: "#/components/examples/invalidPassword"
+            # invalid Phone:
+            #   $ref: "#/components/examples/invalidPhone"
             username Already Exist:
               $ref: "#/components/examples/usernameOrPhoneNumberAlreadyExist"
     deleteDataByIdFailed:
@@ -1097,6 +1123,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseBooksWithDataArray"
           example:
+            code: 200
             data:
               [
                 {
@@ -1129,6 +1156,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseBooksWithData"
           example:
+            code: 200
             data:
               {
                 id: 3,
@@ -1167,7 +1195,8 @@ components:
           schema:
             $ref: "#/components/schemas/responseCreateOrderWithData"
           example:
-            message: success
+            code: 200
+            message: Success
     createOrderFailed:
       description: Bad Request
       content:
@@ -1188,21 +1217,22 @@ components:
           schema:
             $ref: "#/components/schemas/responseOrderWithData"
           example:
+            
             Data:
               [
                 {
-                  UserID: 15,
-                  NameBooks: Netflix,
-                  Image: "https://img.io/1",
-                  PriceOrder: 1254,
-                  Qty: 1,
+                  user_id: 15,
+                  name_books: Netflix,
+                  image: "https://img.io/1",
+                  price_order: 1254,
+                  qty: 1,
                 },
                 {
-                  UserID: 15,
-                  NameBooks: Youtube Premium,
-                  Image: "https://img.io/2",
-                  PriceOrder: 4321,
-                  Qty: 1,
+                  user_id: 15,
+                  name_books: Youtube Premium,
+                  image: "https://img.io/2",
+                  price_order: 4321,
+                  qty: 1,
                 },
               ]
             message: Success Operation
@@ -1213,6 +1243,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseOrderWithData"
           example:
+            code: 200
             data: [
               {
                 id: 1,
@@ -1231,6 +1262,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseOrderWithData"
           example:
+            code: 200
             data: [
               {
                 id: 1,
@@ -1258,6 +1290,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseCreateOrderWithData"
           example:
+            
             message: Success
     OrderResponseFailed:
       description: Bad Request
@@ -1281,6 +1314,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseOrderWithDataArray"
           example:
+            
             data:
               [
                 {
@@ -1308,6 +1342,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseOrderWithDataArray"
           example:
+            
             data:
               [
                 {
@@ -1335,6 +1370,7 @@ components:
           schema:
             $ref: "#/components/schemas/responseOrderWithData"
           example:
+            
             message: success to update data
     UpdateCartFailed:
       description: Bad Request
@@ -1343,6 +1379,7 @@ components:
           schema:
             $ref: "#"
           example:
+            
             message: failed to update data
     UpdateOrderFailed:
       description: Bad Request
@@ -1364,65 +1401,86 @@ components:
   examples:
     accessIsDenied:
       value:
+        code: 400
         message: Access is denied ID data is in the orderInvalid Id
     accessForbidden:
       value:
+        code: 400
         message: Access Forbidden
     badRequest:
       value:
+        code: 400
         message: Bad Request
     cantConnecttoServer:
       value:
+        code: 400
         message: Can't Connect to server
     dataisAvailable:
       value:
+        code: 400
         message: Data is Available
     dataNotFound:
       value:
+        code: 400
         message: Data Not Found
     detailsCantBeEmpty:
       value:
+        code: 400
         message: Details Can't Be Empty
     usernameOrPhoneNumberAlreadyExist:
       value:
-        message: Username or Telephone Number Already Exist
+        code: 400
+        message: username or Telephone Number Already Exist
     failedtoUploadFile:
       value:
+        code: 400
         message: Failed to Upload File
     fileExtensionNotAllowed:
       value:
+        code: 400
         message: File Extension Not Allowed
     
     idBooksNotFound:
       value:
+        code: 400
         message: Id Books Not Found
     illegalFile:
       value:
+        code: 400
         message: Illegal File
     invalidPassword:
       value:
+        code: 400
         message: Invalid Password
     invalidId:
       value:
+        code: 400
         message: Invalid Id
     invalidFullname:
       value:
+        code: 400
         message: Invalid Fullname
     invalidParam:
       value:
+        code: 400
         message: Invalid Param
     invalidTelephoneNumber:
       value:
+        code: 400
         message: Invalid Telephone Number
     invalidUsername:
       value:
+        code: 400
         message: Invalid Username
     notAvailable:
       value:
+        code: 400
         message: Not Available
     invalidPhone:
       value:
+        code: 400
         message: Invalid Phone Number
     sizeFileTooBig:
       value:
+        code: 400
         message: Size File Too Big
