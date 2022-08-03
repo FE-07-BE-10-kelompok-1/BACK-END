@@ -305,6 +305,7 @@ paths:
                     title: yahaha2
                     image: "url.com2"
                     price: 20000
+                total: 40000
 
         "500":
           description: Internal server Error
