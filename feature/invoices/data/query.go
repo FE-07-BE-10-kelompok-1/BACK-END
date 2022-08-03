@@ -64,3 +64,8 @@ func (id *invoiceData) Insert(data domain.Invoice, booksID []uint) (domain.Invoi
 
 	return invoiceData.ToDomain(), nil
 }
+
+func (id *invoiceData) DeleteCarts(userID uint) error {
+	err := id.db.Exec("UPDATE carts SET deleted_at = now() WHERE users_id = ?", userID).Error
+	return err
+}

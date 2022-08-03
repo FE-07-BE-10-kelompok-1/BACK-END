@@ -17,6 +17,7 @@ type InvoiceUsecase interface {
 	GetUserData(id uint) (User, error)
 	UpdateStock([]uint) error
 	InsertInvoice(data Invoice, id []uint) (Invoice, error)
+	DeleteCarts(id uint) error
 }
 
 type InvoiceData interface {
@@ -24,4 +25,5 @@ type InvoiceData interface {
 	GetUser(id uint) (User, error)
 	UpdateStock([]uint) error
 	Insert(data Invoice, id []uint) (Invoice, error)
+	DeleteCarts(id uint) error
 }

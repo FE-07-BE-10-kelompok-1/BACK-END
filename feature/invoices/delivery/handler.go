@@ -32,21 +32,33 @@ func (ih *invoiceHandler) Checkout() echo.HandlerFunc {
 		var reqBody CheckoutReq
 		err := c.Bind(&reqBody)
 		if err != nil {
-			return c.JSON(http.StatusBadRequest, err.Error())
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    http.StatusBadRequest,
+				"message": err.Error(),
+			})
 		}
 		err = validator.New().Struct(reqBody)
 		if err != nil {
-			return c.JSON(http.StatusBadRequest, err.Error())
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    http.StatusBadRequest,
+				"message": err.Error(),
+			})
 		}
 
 		userData, err := ih.invoiceUsecase.GetUserData(uint(common.ExtractData(c)))
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    http.StatusInternalServerError,
+				"message": err.Error(),
+			})
 		}
 
 		data, err := ih.invoiceUsecase.CheckStocks(reqBody.Books_ID)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    http.StatusInternalServerError,
+				"message": err.Error(),
+			})
 		}
 
 		var total int
@@ -58,12 +70,18 @@ func (ih *invoiceHandler) Checkout() echo.HandlerFunc {
 		orderToken := uuid.NewString()
 		res, err := midtranspay.CreateTransactions(snapClient, orderToken, data, userData)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, err.Error())
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    http.StatusInternalServerError,
+				"message": err.Error(),
+			})
 		}
 
 		err = ih.invoiceUsecase.UpdateStock(reqBody.Books_ID)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    http.StatusInternalServerError,
+				"message": err.Error(),
+			})
 		}
 
 		invoice := domain.Invoice{
@@ -75,10 +93,25 @@ func (ih *invoiceHandler) Checkout() echo.HandlerFunc {
 
 		_, err = ih.invoiceUsecase.InsertInvoice(invoice, reqBody.Books_ID)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    http.StatusInternalServerError,
+				"message": err.Error(),
+			})
 		}
 
-		return c.JSON(http.StatusOK, res)
+		err = ih.invoiceUsecase.DeleteCarts(userData.ID)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    http.StatusInternalServerError,
+				"message": err.Error(),
+			})
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"code":     http.StatusOK,
+			"message":  "success checkout",
+			"payments": res,
+		})
 
 	}
 }

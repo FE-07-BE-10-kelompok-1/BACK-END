@@ -31,3 +31,8 @@ func (is *invoiceUsecase) InsertInvoice(data domain.Invoice, id []uint) (domain.
 	invoice, err := is.invoiceData.Insert(data, id)
 	return invoice, err
 }
+
+func (is *invoiceUsecase) DeleteCarts(userID uint) error {
+	err := is.invoiceData.DeleteCarts(userID)
+	return err
+}

@@ -13,7 +13,7 @@ externalDocs:
 servers:
   # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/bookstore_group1/bookstore/1.0.0
+    url: https://virtserver.swaggerhub.com/bookstore_group1/bookstore/1.0
   - url: http://34.143.186.209:9000
     description: Base URL that will be used for endpoints
 tags:
@@ -176,6 +176,11 @@ paths:
       tags:
         - Books
       summary: Get all books
+      parameters:
+        - name: search
+          in: query
+          schema: 
+            type: string
       responses:
         "200":
           $ref: "#/components/responses/getAllBooksSuccess"
@@ -357,13 +362,17 @@ paths:
           content:
             application/json:
               example:
-                token: "1ihuebwjhbshcxascas"
-                redirect_url: "https://app.sandbox.midtrans.com/snap/v3/redirection/5b875658-8d2c-40ca-82ed-56bdba6939df"
+                code: 200
+                message: success checkout
+                payments:
+                  token: "1ihuebwjhbshcxascas"
+                  redirect_url: "https://app.sandbox.midtrans.com/snap/v3/redirection/5b875658-8d2c-40ca-82ed-56bdba6939df"
         "400":
           description: bad request
           content:
             application/json:
               example: 
+                code: 400
                 message: bad request
         "500":
           description: Internal server Error
@@ -372,6 +381,7 @@ paths:
               schema:
                 type: string
               example:
+                code: 500
                 message: internal server error
   /orders:
     get:
@@ -504,6 +514,8 @@ components:
     ###
     requestDataOrder:
       type: array
+      items:
+        title: sadas
     requestDataOrderUpdate:
       type: object
       required:
@@ -1351,86 +1363,64 @@ components:
   examples:
     accessIsDenied:
       value:
-        
         message: Access is denied ID data is in the orderInvalid Id
     accessForbidden:
       value:
-        
         message: Access Forbidden
     badRequest:
       value:
-        
         message: Bad Request
     cantConnecttoServer:
       value:
-        
         Message: Can't Connect to server
     dataisAvailable:
       value:
-        
         message: Data is Available
     dataNotFound:
       value:
-        
         message: Data Not Found
     detailsCantBeEmpty:
       value:
-        
         message: Details Can't Be Empty
     usernameOrPhoneNumberAlreadyExist:
       value:
-        
         message: username or Telephone Number Already Exist
     failedtoUploadFile:
       value:
-        
         message: Failed to Upload File
     fileExtensionNotAllowed:
       value:
-        
         message: File Extension Not Allowed
-    
     idBooksNotFound:
       value:
-        
         message: Id Books Not Found
     illegalFile:
       value:
-        
         message: Illegal File
     invalidPassword:
       value:
-        
         message: Invalid Password
     invalidId:
       value:
-        
         message: Invalid Id
     invalidFullname:
       value:
-        
         message: Invalid Fullname
     invalidParam:
       value:
-        
         message: Invalid Param
     invalidTelephoneNumber:
       value:
-        
         message: Invalid Telephone Number
     invalidUsername:
       value:
-        
         message: Invalid Username
     notAvailable:
       value:
-        
         message: Not Available
     invalidPhone:
       value:
-        
         message: Invalid Phone Number
     sizeFileTooBig:
       value:
-        
         message: Size File Too Big
