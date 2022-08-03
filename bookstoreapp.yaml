@@ -914,8 +914,6 @@ components:
             $ref: "#"
           example:
             books_id: 1
-            quantity: 1
-            price: 100000
     requestBodyBooks:
       required: true
       content:
