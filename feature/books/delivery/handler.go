@@ -39,43 +39,65 @@ func (bh *bookHandler) AddBook() echo.HandlerFunc {
 
 		err := bh.bookUsecase.GetUser(uint(common.ExtractData(c)))
 		if err != nil {
-			return c.JSON(http.StatusUnauthorized, err.Error())
+			return c.JSON(http.StatusUnauthorized, map[string]interface{}{
+				"code":    401,
+				"message": err.Error(),
+			})
 		}
 
 		var newBook BookRequest
 		err = c.Bind(&newBook)
 		if err != nil {
-			return c.JSON(http.StatusBadRequest, "error parsing data")
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    400,
+				"message": err.Error(),
+			})
 		}
 
 		err = validator.New().Struct(newBook)
 		if err != nil {
 			log.Println(err)
-			return c.JSON(http.StatusBadRequest, err.Error())
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    400,
+				"message": err.Error(),
+			})
 		}
 
 		image, err := c.FormFile("image")
 		if err != nil {
-			return c.JSON(http.StatusBadRequest, "image must be inserted")
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    400,
+				"message": err.Error(),
+			})
 		}
 		file, err := c.FormFile("file")
 		if err != nil {
-			return c.JSON(http.StatusBadRequest, "file must be inserted")
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    400,
+				"message": err.Error(),
+			})
 		}
 
 		imageUrl, fileUrl, err := bh.bookUsecase.UploadFiles(session, bucket, image, file)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    500,
+				"message": err.Error(),
+			})
 		}
 		newBook.Image = imageUrl
 		newBook.File = fileUrl
 
 		data, err := bh.bookUsecase.AddBook(newBook.ToDomain())
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    500,
+				"message": err.Error(),
+			})
 		}
 
 		return c.JSON(201, map[string]interface{}{
+			"code":    201,
 			"message": "success create new book",
 			"data":    data,
 		})
@@ -88,7 +110,10 @@ func (bh *bookHandler) GetAllBooks() echo.HandlerFunc {
 
 		data, err := bh.bookUsecase.GetAllBooks()
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    500,
+				"message": err.Error(),
+			})
 		}
 
 		var filteredData []domain.Book
@@ -99,6 +124,7 @@ func (bh *bookHandler) GetAllBooks() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
+			"code":    200,
 			"message": "success get all books data",
 			"data":    filteredData,
 		})
@@ -110,15 +136,22 @@ func (bh *bookHandler) GetSpecificBook() echo.HandlerFunc {
 		param := c.Param("id")
 		id, err := strconv.Atoi(param)
 		if err != nil {
-			return c.JSON(http.StatusBadRequest, "cant convert param")
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    400,
+				"message": err.Error(),
+			})
 		}
 
 		data, err := bh.bookUsecase.GetSpecificBook(uint(id))
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    500,
+				"message": err.Error(),
+			})
 		}
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
+			"code":    200,
 			"message": "success get book " + param,
 			"data":    data,
 		})
@@ -129,27 +162,40 @@ func (bh *bookHandler) UpdateBook() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		err := bh.bookUsecase.GetUser(uint(common.ExtractData(c)))
 		if err != nil {
-			return c.JSON(http.StatusUnauthorized, err.Error())
+			return c.JSON(http.StatusUnauthorized, map[string]interface{}{
+				"code":    401,
+				"message": err.Error(),
+			})
 		}
 
 		param := c.Param("id")
 		id, err := strconv.Atoi(param)
 		if err != nil {
-			return c.JSON(http.StatusBadRequest, "cant convert param")
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    400,
+				"message": err.Error(),
+			})
 		}
 
 		var updatedData BookUpdateRequest
 		err = c.Bind(&updatedData)
 		if err != nil {
-			return c.JSON(http.StatusBadRequest, "error parsing data")
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    400,
+				"message": err.Error(),
+			})
 		}
 
 		data, err := bh.bookUsecase.UpdateBook(uint(id), updatedData.ToDomain())
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    500,
+				"message": err.Error(),
+			})
 		}
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
+			"code":    200,
 			"message": "success update book " + param,
 			"data":    data,
 		})
@@ -160,20 +206,32 @@ func (bh *bookHandler) DeleteBook() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		err := bh.bookUsecase.GetUser(uint(common.ExtractData(c)))
 		if err != nil {
-			return c.JSON(http.StatusUnauthorized, err.Error())
+			return c.JSON(http.StatusUnauthorized, map[string]interface{}{
+				"code":    401,
+				"message": err.Error(),
+			})
 		}
 
 		param := c.Param("id")
 		id, err := strconv.Atoi(param)
 		if err != nil {
-			return c.JSON(http.StatusBadRequest, "cant convert param")
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    400,
+				"message": err.Error(),
+			})
 		}
 
 		err = bh.bookUsecase.DeleteBook(uint(id))
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    500,
+				"message": err.Error(),
+			})
 		}
 
-		return c.JSON(http.StatusOK, "success delete book")
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"code":    200,
+			"message": "success delete book",
+		})
 	}
 }
