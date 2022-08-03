@@ -55,12 +55,12 @@ func (bs *bookUsecase) DeleteBook(id uint) error {
 func (bs *bookUsecase) UploadFiles(session *session.Session, bucket string, image *multipart.FileHeader, file *multipart.FileHeader) (string, string, error) {
 	imageExt := strings.Split(image.Filename, ".")
 	ext := imageExt[len(imageExt)-1]
-	if ext != "png" && ext != "jpeg" && ext != "jpg" {
+	if ext != "png" && ext != "PNG" && ext != "jpeg" && ext != "JPEG" && ext != "jpg" && ext != "JPG" {
 		return "", "", errors.New("image not supported, supported: png/jpeg/jpg")
 	}
 	fileExt := strings.Split(file.Filename, ".")
 	ext = fileExt[len(fileExt)-1]
-	if ext != "pdf" {
+	if ext != "PDF" && ext != "pdf" {
 		return "", "", errors.New("file not supported, supported: pdf")
 	}
 
@@ -70,7 +70,7 @@ func (bs *bookUsecase) UploadFiles(session *session.Session, bucket string, imag
 		return "", "", errors.New("cant upload image to s3")
 	}
 	destination = fmt.Sprint("files/", uuid.NewString(), "_", file.Filename)
-	fileUrl, err := s3.DoUpload(session, *image, bucket, destination)
+	fileUrl, err := s3.DoUpload(session, *file, bucket, destination)
 	if err != nil {
 		return "", "", errors.New("cant upload file to s3")
 	}
