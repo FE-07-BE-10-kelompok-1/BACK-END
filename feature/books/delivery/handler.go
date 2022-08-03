@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/go-playground/validator/v10"
@@ -83,14 +84,23 @@ func (bh *bookHandler) AddBook() echo.HandlerFunc {
 
 func (bh *bookHandler) GetAllBooks() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		search := c.QueryParam("search")
+
 		data, err := bh.bookUsecase.GetAllBooks()
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
+		var filteredData []domain.Book
+		for i := 0; i < len(data); i++ {
+			if strings.Contains(data[i].Title, search) || strings.Contains(data[i].Author, search) {
+				filteredData = append(filteredData, data[i])
+			}
+		}
+
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"message": "success get all books data",
-			"data":    data,
+			"data":    filteredData,
 		})
 	}
 }
