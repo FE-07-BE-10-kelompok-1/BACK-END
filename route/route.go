@@ -11,7 +11,7 @@ import (
 )
 
 func RouteUser(e *echo.Echo, ud domain.UserHandler) {
-	e.POST("/users", ud.InsertUser())
+	e.POST("/register", ud.InsertUser())
 	e.POST("/login", ud.LoginHandler())
 	e.PUT("/users", ud.UpdateUser(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))
 	e.GET("/users", ud.GetProfile(), middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET))))

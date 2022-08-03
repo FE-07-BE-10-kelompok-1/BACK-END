@@ -54,9 +54,12 @@ func (ch *cartHandler) GetCarts() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
+		cartResponse, total := ToCartsResponse(data)
+
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"message": "success get you carts",
-			"data":    ToCartsResponse(data),
+			"data":    cartResponse,
+			"total":   total,
 		})
 	}
 }

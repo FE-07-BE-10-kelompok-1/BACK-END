@@ -3,6 +3,7 @@ package s3
 import (
 	"bookstore/config"
 	"mime/multipart"
+	"net/http"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -40,9 +41,13 @@ func DoUpload(session *session.Session, file multipart.FileHeader, bucket string
 	body, _ := file.Open()
 
 	up, err := uploader.Upload(&s3manager.UploadInput{
-		Bucket: aws.String(bucket),
-		Key:    aws.String(destination),
-		Body:   body,
+		Bucket:             aws.String(bucket),
+		ACL:                aws.String("public-read"),
+		Key:                aws.String(destination),
+		Body:               body,
+		ContentType:        aws.String(http.DetectContentType(buffer)),
+		ContentDisposition: aws.String("attachment"),
 	})
+
 	return up.Location, err
 }

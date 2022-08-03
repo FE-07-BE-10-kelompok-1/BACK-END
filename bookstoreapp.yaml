@@ -14,7 +14,7 @@ servers:
   # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/bookstore_group1/bookstore/1.0.0
-  - url: 34.238.252.143:8000
+  - url: http://34.143.186.209:9000
     description: Base URL that will be used for endpoints
 tags:
   - name: Login
@@ -79,11 +79,11 @@ paths:
   ####################################
   #  USERS
   ####################################
-  /users/id:
+  /users:
     get:
       tags:
         - Users
-      summary: Get user's data by id
+      summary: Get users data (Get Profile)
       security:
         - JWTAuth: []
       responses:
@@ -99,11 +99,10 @@ paths:
                 type: string
               example:
                 message: internal server error
-  /users:
     put:
       tags:
         - Users
-      summary: Edit user's data by id
+      summary: Edit users data (Edit Profile)
       security:
         - JWTAuth: []
       requestBody:
@@ -124,7 +123,7 @@ paths:
     delete:
       tags:
         - Users
-      summary: Delete user's data by id
+      summary: Delete users (Delete Profile)
       security:
         - JWTAuth: []
       responses:
@@ -271,6 +270,42 @@ paths:
                 type: string
               example:
                 message: internal server error
+    get:
+      summary: Get My Carts
+      security:
+        - JWTAuth: []
+      tags:
+        - "Carts"
+      responses:
+        "200":
+          description: Get My Carts
+          content:
+            application/json:
+              example:
+                message: success get my carts
+                data: 
+                  - id: 1
+                    books_id: 1
+                    title: yahaha
+                    image: "url.com"
+                    price: 20000
+                  - id: 2
+                    books_id: 2
+                    title: yahaha2
+                    image: "url.com2"
+                    price: 20000
+                total: 40000
+
+        "500":
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                message: internal server error
+            
+  /carts/id:
     delete:
       tags:
         - Carts
@@ -292,7 +327,6 @@ paths:
                 type: string
               example:
                 message: internal server error
-
   ####################################
   #  ORDERS
   ####################################
@@ -441,23 +475,7 @@ components:
     
     requestDataBooks:
       type: object
-      required:
-        - file
-        - images
-        - title
-        - price
-        - stock
-        - author
-        - sinopsis
       properties:
-        images:
-          type: string
-          format: binary
-          description: "upload book image"
-        file:
-          type: string
-          format: binary
-          description: "upload book file"
         title:
           type: string
           description: "input title book here"
@@ -481,7 +499,7 @@ components:
         - price
         - stock
         - file
-        - images
+        - image
       properties:
         name_books:
           type: string
@@ -599,7 +617,7 @@ components:
             url:
               type: string
             userid:
-              type: int
+              type: integer
         message:
           type: string
     responseBooksWithDataArray:
@@ -626,7 +644,7 @@ components:
               url:
                 type: string
               userid:
-                type: int
+                type: integer
         message:
           type: string
     responseGroupBooksWithData:
@@ -880,8 +898,6 @@ components:
             $ref: "#"
           example:
             books_id: 1
-            quantity: 1
-            price: 100000
     requestBodyBooks:
       required: true
       content:
@@ -897,7 +913,7 @@ components:
             stock: 5
             author: sejeong kim
             sinopsis: pada jaman dahulu kala
-            images: photo.jpg
+            image: photo.jpg
             file: file.pdf
             
     requestBodyBooksUpdate:
@@ -915,7 +931,7 @@ components:
             stock: 5
             author: sejeong kim
             sinopsis: pada jaman dahulu kala
-            images: photo.jpg
+            image: photo.jpg
             file: file.pdf
     requestBodyOrder:
       required: true
@@ -1086,7 +1102,8 @@ components:
                 {
                   id: 3,
                   title: The Rain,
-                  images: https://storage.googleapis.com/Book-store/TheRain.jpg,
+                  image: "https://storage.googleapis.com/Book-store/TheRain.jpg",
+                  file: "url.com",
                   stock: 6,
                   price: 300000,
                   author: suzy,
@@ -1096,7 +1113,8 @@ components:
                 {
                   id: 4,
                   title: The Moon,
-                  images: https://storage.googleapis.com/Book-store/theRain.jpg,
+                  image: "https://storage.googleapis.com/Book-store/TheRain.jpg",
+                  file: "url.com",
                   stock: 4,
                   price: 200000,
                   author: difa,
@@ -1114,12 +1132,13 @@ components:
             data:
               {
                 id: 3,
-                  title: The Rain,
-                  images: TheRain.jpg,
-                  url: https://storage.googleapis.com/Book-store/TheRain.jpg,
-                  stock: 6,
-                  price: 300000,
-                  userid: 1,
+                title: The Rain,
+                image: "https://storage.googleapis.com/Book-store/TheRain.jpg",
+                file: "url.com",
+                stock: 6,
+                price: 300000,
+                author: suzy,
+                sinopsis: once upon a time,
               }
             message: Success
     updateBooksFailed:
@@ -1174,14 +1193,14 @@ components:
                 {
                   UserID: 15,
                   NameBooks: Netflix,
-                  Image: https://img.io/1,
+                  Image: "https://img.io/1",
                   PriceOrder: 1254,
                   Qty: 1,
                 },
                 {
                   UserID: 15,
                   NameBooks: Youtube Premium,
-                  Image: https://img.io/2,
+                  Image: "https://img.io/2",
                   PriceOrder: 4321,
                   Qty: 1,
                 },
