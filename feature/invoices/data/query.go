@@ -100,3 +100,19 @@ func (id *invoiceData) Update(data domain.Invoice, orderID string) error {
 	err := id.db.Model(&Invoice{}).Where("id = ?", orderID).Updates(ToEntity(data)).Error
 	return err
 }
+
+func (id *invoiceData) GetOrder(orderID string, userID uint) error {
+	err := id.db.Where("id = ? and users_id = ?", orderID, userID).First(&Invoice{}).Error
+	if err != nil {
+		return errors.New("data not found, either not yours or there really isn't such data")
+	}
+
+	return nil
+}
+
+func (id *invoiceData) UpdateStockAfterCancel(orderID string) error {
+	var booksID []uint
+	id.db.Raw("SELECT books_id FROM orders WHERE invoice_id = ?", orderID).Scan(&booksID)
+	err := id.db.Exec("UPDATE books SET stock = stock + 1, updated_at = now() WHERE id in (?)", booksID).Error
+	return err
+}

@@ -6,11 +6,12 @@ import (
 	"bookstore/feature/common"
 	"bookstore/feature/middlewares"
 	"bookstore/infrastructure/payments/midtranspay"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
+	"strconv"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
@@ -31,7 +32,7 @@ func New(e *echo.Echo, is domain.InvoiceUsecase) {
 	e.POST("/checkout", handler.Checkout(), useJWT)
 	e.GET("/orders", handler.GetOrders(), useJWT)
 	e.POST("/orders", handler.MidtransCallback())
-	e.POST("/orders/cancel", handler.CancelOrder())
+	e.POST("/orders/cancel", handler.CancelOrder(), useJWT)
 }
 
 func (ih *invoiceHandler) Checkout() echo.HandlerFunc {
@@ -168,6 +169,19 @@ func (ih *invoiceHandler) MidtransCallback() echo.HandlerFunc {
 				log.Println(err)
 				return c.JSON(http.StatusInternalServerError, err.Error())
 			}
+		} else if midtransReq.Transaction_Status == "cancel" || midtransReq.Transaction_Status == "expiry" || midtransReq.Transaction_Status == "deny" {
+			invoiceData.Status = midtransReq.Transaction_Status
+			err = ih.invoiceUsecase.MidtransCallback(invoiceData, midtransReq.Order_ID)
+			if err != nil {
+				log.Println(err)
+				return c.JSON(http.StatusInternalServerError, err.Error())
+			}
+
+			err = ih.invoiceUsecase.UpdateStockAfterCancel(midtransReq.Order_ID)
+			if err != nil {
+				log.Println(err)
+				return c.JSON(http.StatusInternalServerError, err.Error())
+			}
 		} else {
 			invoiceData.Status = midtransReq.Transaction_Status
 			err = ih.invoiceUsecase.MidtransCallback(invoiceData, midtransReq.Order_ID)
@@ -183,34 +197,62 @@ func (ih *invoiceHandler) MidtransCallback() echo.HandlerFunc {
 
 func (ih *invoiceHandler) CancelOrder() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		req, err := http.NewRequest(http.MethodGet, "https://server.athaprojects.me/books", nil)
+		var cancelReq CancelOrder
+		err := c.Bind(&cancelReq)
 		if err != nil {
-			fmt.Printf("client: could not create request: %s\n", err)
-			os.Exit(1)
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    400,
+				"message": err.Error(),
+			})
+		}
+		err = validator.New().Struct(cancelReq)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    400,
+				"message": err.Error(),
+			})
+		}
+
+		err = ih.invoiceUsecase.GetOrder(cancelReq.Order_ID, uint(common.ExtractData(c)))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    500,
+				"message": err.Error(),
+			})
+		}
+
+		req, err := http.NewRequest(http.MethodPost, fmt.Sprint("https://api.sandbox.midtrans.com/v2/", cancelReq.Order_ID, "/cancel"), nil)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"message": err.Error(),
+				"code":    500,
+			})
 		}
 
 		req.Header.Add("Authorization", "Basic U0ItTWlkLXNlcnZlci1Zd0JIdzRZZTdNajEwVy1rNXVRTkJHTno6")
 
 		res, err := http.DefaultClient.Do(req)
 		if err != nil {
-			fmt.Printf("client: error making http request: %s\n", err)
-			os.Exit(1)
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"message": err.Error(),
+				"code":    500,
+			})
 		}
 
-		fmt.Println(res.Header.Get("authorization"))
-
+		var resStruct ResponseCancelFromMidtrans
 		resBody, err := ioutil.ReadAll(res.Body)
 		if err != nil {
-			fmt.Printf("client: could not read response body: %s\n", err)
-			os.Exit(1)
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"message": err.Error(),
+				"code":    500,
+			})
 		}
-		fmt.Printf("client: response body: %s\n", resBody)
 
-		return c.JSON(http.StatusOK, map[string]interface{}{
-			"code":      200,
-			"message":   "success cancel order",
-			"serverKey": config.MIDTRANS_SERVER_KEY,
-			"data":      resBody,
+		_ = json.Unmarshal(resBody, &resStruct)
+		cnvCode, _ := strconv.Atoi(resStruct.StatusCode)
+		return c.JSON(cnvCode, map[string]interface{}{
+			"code":    cnvCode,
+			"message": resStruct.StatusMessage,
 		})
 	}
 }
