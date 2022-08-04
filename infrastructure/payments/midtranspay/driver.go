@@ -34,6 +34,15 @@ func CreateTransactions(s snap.Client, token string, books []domain.Book, userDa
 			OrderID:  token,
 			GrossAmt: int64(total),
 		},
+		EnabledPayments: []snap.SnapPaymentType{
+			"gopay",
+			"shopeepay",
+			"bca_va",
+			"bca_klikbca",
+			"bca_klikpay",
+			"Indomaret",
+			"alfamart",
+		},
 		Items: &booksDetails,
 		CustomerDetail: &midtrans.CustomerDetails{
 			FName: userData.Fullname,
