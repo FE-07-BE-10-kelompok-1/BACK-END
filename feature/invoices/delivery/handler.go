@@ -158,9 +158,7 @@ func (ih *invoiceHandler) MidtransCallback() echo.HandlerFunc {
 
 		var invoiceData domain.Invoice
 		if midtransReq.Transaction_Status == "settlement" {
-			invoiceData.Status = midtransReq.Transaction_Status
-			invoiceData.Payment_Method = midtransReq.Payment_Type
-			invoiceData.Paid_At = midtransReq.Settlement_Time
+			invoiceData = domain.Invoice{Status: midtransReq.Transaction_Status, Payment_Method: midtransReq.Payment_Type, Paid_At: midtransReq.Settlement_Time}
 			err = ih.invoiceUsecase.MidtransCallback(invoiceData, midtransReq.Order_ID)
 			if err != nil {
 				log.Println(err)
@@ -175,7 +173,6 @@ func (ih *invoiceHandler) MidtransCallback() echo.HandlerFunc {
 			}
 		}
 
-		log.Println(midtransReq)
 		return c.JSON(http.StatusOK, "ok")
 	}
 }

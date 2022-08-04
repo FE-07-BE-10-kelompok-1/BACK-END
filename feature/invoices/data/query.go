@@ -97,6 +97,6 @@ func (id *invoiceData) GetMyOrders(userID uint) ([]domain.GetAllInvoices, error)
 }
 
 func (id *invoiceData) Update(data domain.Invoice, orderID string) error {
-	err := id.db.Model(&Invoice{}).Where("id = ?", orderID).Updates(data).Error
+	err := id.db.Model(&Invoice{}).Where("id = ?", orderID).Updates(ToEntity(data)).Error
 	return err
 }

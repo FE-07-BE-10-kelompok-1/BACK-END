@@ -21,11 +21,13 @@ type Invoice struct {
 
 func ToEntity(data domain.Invoice) Invoice {
 	return Invoice{
-		ID:           data.ID,
-		Users_ID:     data.Users_ID,
-		Total:        data.Total,
-		Status:       data.Status,
-		Payment_Link: data.Payment_Link,
+		ID:             data.ID,
+		Users_ID:       data.Users_ID,
+		Total:          data.Total,
+		Status:         data.Status,
+		Payment_Link:   data.Payment_Link,
+		Payment_Method: data.Payment_Method,
+		Paid_At:        data.Paid_At,
 	}
 }
 

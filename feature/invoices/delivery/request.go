@@ -9,5 +9,4 @@ type MidtransCallbackRequest struct {
 	Transaction_Status string `json:"transaction_status" form:"transaction_status"`
 	Settlement_Time    string `json:"settlement_time" form:"settlement_time"`
 	Payment_Type       string `json:"payment_type" form:"payment_type"`
-	Gross_Amount       string `json:"gross_amount" form:"gross_amount"`
 }
