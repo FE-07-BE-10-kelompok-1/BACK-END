@@ -391,8 +391,6 @@ paths:
       tags:
         - Orders
       summary: Get All Orders (if role =admin all, if role=user all that user orders)
-      parameters:
-        - $ref: "#/components/parameters/idParam"
       security:
         - JWTAuth: []
       responses:

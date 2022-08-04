@@ -3,7 +3,6 @@ package data
 import (
 	"bookstore/domain"
 	"bookstore/feature/orders/data"
-	"time"
 
 	"gorm.io/gorm"
 )
@@ -16,7 +15,7 @@ type Invoice struct {
 	Status         string `gorm:"default:waiting"`
 	Payment_Link   string
 	Payment_Method string       `gorm:"default:NULL"`
-	Paid_At        time.Time    `gorm:"default:NULL"`
+	Paid_At        string       `gorm:"default:NULL"`
 	Orders         []data.Order `gorm:"foreignKey:Invoice_ID"`
 }
 

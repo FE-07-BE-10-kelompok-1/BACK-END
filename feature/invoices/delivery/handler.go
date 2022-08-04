@@ -6,6 +6,7 @@ import (
 	"bookstore/feature/common"
 	"bookstore/feature/middlewares"
 	"bookstore/infrastructure/payments/midtranspay"
+	"log"
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
@@ -25,6 +26,8 @@ func New(e *echo.Echo, is domain.InvoiceUsecase) {
 	}
 	useJWT := middleware.JWTWithConfig(middlewares.UseJWT([]byte(config.SECRET)))
 	e.POST("/checkout", handler.Checkout(), useJWT)
+	e.GET("/orders", handler.GetOrders(), useJWT)
+	e.POST("/orders", handler.MidtransCallback())
 }
 
 func (ih *invoiceHandler) Checkout() echo.HandlerFunc {
@@ -113,5 +116,65 @@ func (ih *invoiceHandler) Checkout() echo.HandlerFunc {
 			"payments": res,
 		})
 
+	}
+}
+
+func (ih *invoiceHandler) GetOrders() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		userData, err := ih.invoiceUsecase.GetUserData(uint(common.ExtractData(c)))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    http.StatusInternalServerError,
+				"message": err.Error(),
+			})
+		}
+
+		data, err := ih.invoiceUsecase.GetAllOrders(userData)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    500,
+				"message": err.Error(),
+			})
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"code":    200,
+			"message": "success get all orders",
+			"data":    data,
+		})
+	}
+}
+
+func (ih *invoiceHandler) MidtransCallback() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		var midtransReq MidtransCallbackRequest
+		err := c.Bind(&midtransReq)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    400,
+				"message": err.Error(),
+			})
+		}
+
+		var invoiceData domain.Invoice
+		if midtransReq.Transaction_Status == "settlement" {
+			invoiceData.Status = midtransReq.Transaction_Status
+			invoiceData.Payment_Method = midtransReq.Payment_Type
+			invoiceData.Paid_At = midtransReq.Settlement_Time
+			err = ih.invoiceUsecase.MidtransCallback(invoiceData)
+			if err != nil {
+				log.Println(err)
+				return c.JSON(http.StatusInternalServerError, err.Error())
+			}
+		} else {
+			invoiceData.Status = midtransReq.Transaction_Status
+			err = ih.invoiceUsecase.MidtransCallback(invoiceData)
+			if err != nil {
+				log.Println(err)
+				return c.JSON(http.StatusInternalServerError, err.Error())
+			}
+		}
+
+		return nil
 	}
 }
