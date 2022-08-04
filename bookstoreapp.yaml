@@ -1011,7 +1011,7 @@ components:
             $ref: "#/components/schemas/responseUserWithData"
           example:
             code: 200
-            data: { id: 1, fullname: cha eun woo, username: chaeunwoo, phone: "081936665965", password: "123" }
+            data: { id: 1, fullname: cha eun woo, username: chaeunwoo, phone: "081936665965", password: "$2a$10$.8HsdlCvF4jpS0dNU.4fYu/v/kY39ReHcej.Vh17QpdfzDqJBiO1S", role: "user" }
             message: Success Operation
     getDataByIdFailed:
       description: Bad Request Response
@@ -1204,18 +1204,44 @@ components:
       description: Success Operation
       content:
         application/json:
-          schema:
-            $ref: "#/components/schemas/responseOrderWithData"
           example:
             code: 200
             data: [
               {
-                id: 1,
-                order_id: 5,
-                invoice_id: 1,
-                title: "our story",
-                price: 200000,
-                qty: 1,
+                id: "afsdfsdfsd-asdasd",
+                username: "atha",
+                total: 20000,
+                status: settlement,
+                payment_link: "url.com",
+                payment_method: "gopay",
+                paid_at: "2022-08-04 14:36:15",
+                created_at: "2022-08-04T07:33:39.025Z",
+                orders: [{
+                  id: 1,
+                  invoice_id: "6af8b4e5-5280-46d4-8262-09c5c6e262f1",
+                  books_id: 1,
+                  title: "CV_Atha_Dhaiffathin",
+                  image: "https://bookstorealtagroupproject.s3.ap-southeast-1.amazonaws.com/images/6a6de40c-f5a6-4f00-9494-47733b8a8270_ERD.jpg",
+                  price: 20000
+                }],
+              },
+              {
+                id: "afsdfsdfsd-asdasd",
+                username: "atha",
+                total: 20000,
+                status: settlement,
+                payment_link: "url.com",
+                payment_method: "gopay",
+                paid_at: "2022-08-04 14:36:15",
+                created_at: "2022-08-04T07:33:39.025Z",
+                orders: [{
+                  id: 1,
+                  invoice_id: "6af8b4e5-5280-46d4-8262-09c5c6e262f1",
+                  books_id: 1,
+                  title: "CV_Atha_Dhaiffathin",
+                  image: "https://bookstorealtagroupproject.s3.ap-southeast-1.amazonaws.com/images/6a6de40c-f5a6-4f00-9494-47733b8a8270_ERD.jpg",
+                  price: 20000
+                }],
               }
             ]
             message: "success"

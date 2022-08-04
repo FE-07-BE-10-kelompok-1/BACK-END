@@ -6,8 +6,11 @@ import (
 	"bookstore/feature/common"
 	"bookstore/feature/middlewares"
 	"bookstore/infrastructure/payments/midtranspay"
+	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
@@ -28,6 +31,7 @@ func New(e *echo.Echo, is domain.InvoiceUsecase) {
 	e.POST("/checkout", handler.Checkout(), useJWT)
 	e.GET("/orders", handler.GetOrders(), useJWT)
 	e.POST("/orders", handler.MidtransCallback())
+	e.POST("/orders/cancel", handler.CancelOrder())
 }
 
 func (ih *invoiceHandler) Checkout() echo.HandlerFunc {
@@ -174,5 +178,39 @@ func (ih *invoiceHandler) MidtransCallback() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, "ok")
+	}
+}
+
+func (ih *invoiceHandler) CancelOrder() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		req, err := http.NewRequest(http.MethodGet, "https://server.athaprojects.me/books", nil)
+		if err != nil {
+			fmt.Printf("client: could not create request: %s\n", err)
+			os.Exit(1)
+		}
+
+		req.Header.Add("Authorization", "Basic U0ItTWlkLXNlcnZlci1Zd0JIdzRZZTdNajEwVy1rNXVRTkJHTno6")
+
+		res, err := http.DefaultClient.Do(req)
+		if err != nil {
+			fmt.Printf("client: error making http request: %s\n", err)
+			os.Exit(1)
+		}
+
+		fmt.Println(res.Header.Get("authorization"))
+
+		resBody, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			fmt.Printf("client: could not read response body: %s\n", err)
+			os.Exit(1)
+		}
+		fmt.Printf("client: response body: %s\n", resBody)
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"code":      200,
+			"message":   "success cancel order",
+			"serverKey": config.MIDTRANS_SERVER_KEY,
+			"data":      resBody,
+		})
 	}
 }

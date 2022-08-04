@@ -67,6 +67,7 @@ func initConfig() *AppConfig {
 	defaultConfig.AWS_ACCESS_KEY_ID = os.Getenv("AWS_ACCESS_KEY_ID")
 	defaultConfig.AWS_SECRET_ACCESS_KEY = os.Getenv("AWS_SECRET_ACCESS_KEY")
 	defaultConfig.BUCKET_NAME = os.Getenv("BUCKET_NAME")
+	MIDTRANS_SERVER_KEY = os.Getenv("MIDTRANS_SERVER_KEY")
 	defaultConfig.MIDTRANS_SERVER_KEY = os.Getenv("MIDTRANS_SERVER_KEY")
 	return &defaultConfig
 }

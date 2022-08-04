@@ -34,7 +34,7 @@ func (cd *cartData) Insert(data domain.Cart) error {
 
 func (cd *cartData) GetAll(id uint) ([]domain.JoinCartWithBooks, error) {
 	var cartJoinsData []domain.JoinCartWithBooks
-	err := cd.db.Model(&Cart{}).Select("carts.id, carts.books_id, books.title, books.price, books.image").Joins("inner join books on carts.books_id = books.id").Where("carts.users_id = ?", id).Scan(&cartJoinsData).Error
+	err := cd.db.Model(&Cart{}).Select("carts.id, carts.books_id, books.title, books.price, books.image, books.author").Joins("inner join books on carts.books_id = books.id").Where("carts.users_id = ?", id).Scan(&cartJoinsData).Error
 	if err != nil {
 		return nil, err
 	}
