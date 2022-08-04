@@ -159,8 +159,24 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/requestBodyBooks"
       responses:
-        "200":
-          $ref: "#/components/responses/successOperationNonData"
+        "201":
+          description: success create books
+          content:
+            application/json:
+              example: {
+                code: 201,
+                data: {
+                  id: 16,
+                  title: "buku kesepuluh",
+                  image: "https://bookstorealtagroupproject.s3.ap-southeast-1.amazonaws.com/images/614022c8-8ad5-4e77-ae64-b4d7b43a6e1f_cvss.PNG",
+                  price: 20000,
+                  stock: 12,
+                  author: "atha",
+                  sinopsis: "atha",
+                  file: "https://bookstorealtagroupproject.s3.ap-southeast-1.amazonaws.com/files/5c873746-a091-462d-a904-8c17bce296ce_CV_ATHA-DHAIFFATHIN.pdf"
+                },
+                message: "success create new book"
+              }
         "400":
           $ref: "#/components/responses/createBooksFailed"
         "500":
