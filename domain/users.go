@@ -3,12 +3,12 @@ package domain
 import "github.com/labstack/echo/v4"
 
 type User struct {
-	ID       uint
-	Fullname string
-	Username string
-	Phone    string
-	Password string
-	Role     string
+	ID       uint   `json:"id"`
+	Fullname string `json:"fullname"`
+	Username string `json:"username"`
+	Phone    string `json:"phone"`
+	Password string `json:"password"`
+	Role     string `json:"role"`
 }
 
 type UserHandler interface {

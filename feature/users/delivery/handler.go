@@ -121,13 +121,9 @@ func (uh *userHandler) GetProfile() echo.HandlerFunc {
 			}
 		}
 		return c.JSON(http.StatusFound, map[string]interface{}{
-			"code":     200,
-			"id":       data.ID,
-			"fullname": data.Fullname,
-			"username": data.Username,
-			"phone":    data.Phone,
-			"password": data.Password,
-			"message":  "Success Operation",
+			"code":    200,
+			"message": "Success Operation",
+			"data":    data,
 		})
 	}
 }
