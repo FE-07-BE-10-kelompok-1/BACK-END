@@ -407,6 +407,46 @@ paths:
               example:
                 code: 500
                 message: internal server error
+  /orders/cancel:
+    post: 
+      security:
+        - JWTAuth: []
+      tags:
+        - "Orders"
+      summary: cancel order endpoint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+            example:
+              order_id: 1287g3e23edgaw-bf-2378etbrg-hwf
+      responses:
+        "200":
+          description: success cancel order
+          content:
+            application/json:
+              example:
+                code: 200
+                message: success canceling order
+        "400":
+          description: bad request
+          content:
+            application/json:
+              example:
+                code: 400
+                message: bad request
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              example:
+                code: 500
+                message: internal server error
     
 ####################################
 #  COMPONENTS
