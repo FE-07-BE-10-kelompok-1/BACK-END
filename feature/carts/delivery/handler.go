@@ -32,17 +32,26 @@ func (ch *cartHandler) AddToCart() echo.HandlerFunc {
 		var addToCart AddToCart
 		err := c.Bind(&addToCart)
 		if err != nil {
-			return c.JSON(http.StatusBadRequest, err.Error())
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    400,
+				"message": err.Error(),
+			})
 		}
 
 		data := domain.Cart{Books_ID: addToCart.Books_ID, Users_ID: uint(userID)}
 
 		err = ch.cartUsecase.AddToCart(data)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    500,
+				"message": err.Error(),
+			})
 		}
 
-		return c.JSON(http.StatusOK, "success add to cart")
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"code":    200,
+			"message": "success add to cart",
+		})
 	}
 }
 
@@ -51,12 +60,16 @@ func (ch *cartHandler) GetCarts() echo.HandlerFunc {
 		usersID := common.ExtractData(c)
 		data, err := ch.cartUsecase.GetCarts(uint(usersID))
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    500,
+				"message": err.Error(),
+			})
 		}
 
 		cartResponse, total := ToCartsResponse(data)
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
+			"code":    200,
 			"message": "success get you carts",
 			"data":    cartResponse,
 			"total":   total,
@@ -69,15 +82,24 @@ func (ch *cartHandler) DeleteFromCart() echo.HandlerFunc {
 		param := c.Param("id")
 		id, err := strconv.Atoi(param)
 		if err != nil {
-			return c.JSON(http.StatusBadRequest, err.Error())
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{
+				"code":    400,
+				"message": err.Error(),
+			})
 		}
 
 		data := domain.Cart{ID: uint(id), Users_ID: uint(common.ExtractData(c))}
 		err = ch.cartUsecase.DeleteFromCart(data)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"code":    500,
+				"message": err.Error(),
+			})
 		}
 
-		return c.JSON(http.StatusOK, "success delete item from cart")
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"code":    200,
+			"message": "success delete item from cart",
+		})
 	}
 }
