@@ -31,7 +31,7 @@ type InvoiceUsecase interface {
 	InsertInvoice(data Invoice, id []uint) (Invoice, error)
 	DeleteCarts(id uint) error
 	GetAllOrders(user User) ([]GetAllInvoices, error)
-	MidtransCallback(data Invoice) error
+	MidtransCallback(data Invoice, id string) error
 }
 
 type InvoiceData interface {
@@ -42,5 +42,5 @@ type InvoiceData interface {
 	DeleteCarts(id uint) error
 	GetAll() ([]GetAllInvoices, error)
 	GetMyOrders(id uint) ([]GetAllInvoices, error)
-	Update(data Invoice) error
+	Update(data Invoice, id string) error
 }

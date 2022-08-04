@@ -161,20 +161,21 @@ func (ih *invoiceHandler) MidtransCallback() echo.HandlerFunc {
 			invoiceData.Status = midtransReq.Transaction_Status
 			invoiceData.Payment_Method = midtransReq.Payment_Type
 			invoiceData.Paid_At = midtransReq.Settlement_Time
-			err = ih.invoiceUsecase.MidtransCallback(invoiceData)
+			err = ih.invoiceUsecase.MidtransCallback(invoiceData, midtransReq.Order_ID)
 			if err != nil {
 				log.Println(err)
 				return c.JSON(http.StatusInternalServerError, err.Error())
 			}
 		} else {
 			invoiceData.Status = midtransReq.Transaction_Status
-			err = ih.invoiceUsecase.MidtransCallback(invoiceData)
+			err = ih.invoiceUsecase.MidtransCallback(invoiceData, midtransReq.Order_ID)
 			if err != nil {
 				log.Println(err)
 				return c.JSON(http.StatusInternalServerError, err.Error())
 			}
 		}
 
-		return nil
+		log.Println(midtransReq)
+		return c.JSON(http.StatusOK, "ok")
 	}
 }

@@ -48,7 +48,7 @@ func (is *invoiceUsecase) GetAllOrders(userData domain.User) ([]domain.GetAllInv
 	return data, err
 }
 
-func (is *invoiceUsecase) MidtransCallback(data domain.Invoice) error {
-	err := is.invoiceData.Update(data)
+func (is *invoiceUsecase) MidtransCallback(data domain.Invoice, id string) error {
+	err := is.invoiceData.Update(data, id)
 	return err
 }
