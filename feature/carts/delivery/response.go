@@ -10,6 +10,7 @@ type Carts struct {
 	Title    string `json:"title" form:"title"`
 	Price    uint   `json:"price" form:"price"`
 	Image    string `json:"image" form:"image"`
+	Author   string `json:"author" form:"author"`
 }
 
 func ToCartsResponse(data []domain.JoinCartWithBooks) ([]Carts, uint) {
@@ -22,6 +23,7 @@ func ToCartsResponse(data []domain.JoinCartWithBooks) ([]Carts, uint) {
 			Title:    data[i].Title,
 			Price:    data[i].Price,
 			Image:    data[i].Image,
+			Author:   data[i].Author,
 		})
 		total += data[i].Price
 	}
