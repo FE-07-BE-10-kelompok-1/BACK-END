@@ -23,68 +23,93 @@ func TestAddUser(t *testing.T) {
 		Password: "12345678",
 		Role:     "user",
 	}
-	outputData := domain.User{
-		ID:       1,
-		Fullname: "Rizuana Nadifatul",
-		Username: "rizunadiva",
-		Phone:    "081936665965",
-		Password: "12345678",
-		Role:     "user",
-	}
+	// outputData := domain.User{
+	// 	ID:       1,
+	// 	Fullname: "Rizuana Nadifatul",
+	// 	Username: "rizunadiva",
+	// 	Phone:    "081936665965",
+	// 	Password: "12345678",
+	// 	Role:     "user",
+	// }
 	t.Run("Success Insert", func(t *testing.T) {
-		repo.On("Insert", mock.Anything).Return(outputData, nil).Once()
+		repo.On("Insert", mock.Anything).Return(1, nil).Once()
 
 		useCase := New(repo, validator.New())
 
 		res, err := useCase.AddUser(insertData)
 		assert.Nil(t, err)
-		assert.Equal(t, outputData, res)
-		repo.AssertExpectations(t)
-	})
-
-	t.Run("Validator error", func(t *testing.T) {
-		insertData := domain.User{ID: 0, Fullname: "", Username: "", Phone: "", Password: "", Role: ""}
-		repo.On("Insert", mock.Anything).Return(domain.User{}, nil).Once()
-
-		useCase := New(repo, validator.New())
-
-		res, _ := useCase.AddUser(insertData)
-		// assert.EqualError(t, err, "error")
-		// assert.Greater(t, res.ID, 0)
-		// assert.Equal(t, "", res)
-		assert.Equal(t, "", res.Username)
-		assert.Equal(t, "", res.Password, "Password tidak sesuai")
-		assert.Equal(t, "", res.Phone)
+		assert.Equal(t, 1, res)
 		repo.AssertExpectations(t)
 	})
 
 	t.Run("Duplicated Data", func(t *testing.T) {
-		repo.On("Insert", mock.Anything).Return(domain.User{}, gorm.ErrRegistered).Once()
+		repo.On("Insert", mock.Anything).Return(0, gorm.ErrRegistered).Once()
+
+		useCase := New(repo, validator.New())
+
+		row, err := useCase.AddUser(insertData)
+		assert.NotNil(t, err)
+		assert.Equal(t, -4, row)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Error from server", func(t *testing.T) {
+		repo.On("Insert", mock.Anything).Return(0, gorm.ErrInvalidValueOfLength).Once()
 
 		useCase := New(repo, validator.New())
 
 		res, err := useCase.AddUser(insertData)
 		assert.NotNil(t, err)
-		assert.EqualError(t, err, gorm.ErrRegistered.Error())
-		assert.Equal(t, uint(0), res.ID)
-		assert.Equal(t, "", res.Username)
-		assert.Equal(t, "", res.Password)
-		assert.Equal(t, "", res.Phone)
+		assert.Equal(t, -4, res)
 		repo.AssertExpectations(t)
 	})
 
-	t.Run("Error from server", func(t *testing.T) {
-		repo.On("Insert", mock.Anything).Return(domain.User{}, gorm.ErrInvalidValueOfLength).Once()
+	t.Run("Empty Fullname", func(t *testing.T) {
+		repo.On("Insert", mock.Anything).Return(1, nil).Once()
 
 		useCase := New(repo, validator.New())
+		dummy := insertData
+		dummy.Fullname = ""
+		res, err := useCase.AddUser(dummy)
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, errors.New("invalid fullname").Error())
+		assert.Equal(t, -1, res)
+	})
 
-		insertData.Username = "123aoeijakdngnsvbsnzoczbjfakdjfoadijfoangnbcoloijapdfaposdjfpk"
-		res, _ := useCase.AddUser(insertData)
-		assert.Equal(t, uint(0), res.ID)
-		assert.Equal(t, "", res.Username)
-		assert.Equal(t, "", res.Password)
-		assert.Equal(t, "", res.Phone)
-		repo.AssertExpectations(t)
+	t.Run("Empty Password", func(t *testing.T) {
+		repo.On("Insert", mock.Anything).Return(1, nil).Once()
+
+		useCase := New(repo, validator.New())
+		dummy := insertData
+		dummy.Password = ""
+		res, err := useCase.AddUser(dummy)
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, errors.New("invalid password").Error())
+		assert.Equal(t, -1, res)
+	})
+
+	t.Run("Empty Phone", func(t *testing.T) {
+		repo.On("Insert", mock.Anything).Return(1, nil).Once()
+
+		useCase := New(repo, validator.New())
+		dummy := insertData
+		dummy.Phone = ""
+		res, err := useCase.AddUser(dummy)
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, errors.New("invalid phone number").Error())
+		assert.Equal(t, -1, res)
+	})
+
+	t.Run("Empty Username", func(t *testing.T) {
+		repo.On("Insert", mock.Anything).Return(1, nil).Once()
+
+		useCase := New(repo, validator.New())
+		dummy := insertData
+		dummy.Username = ""
+		res, err := useCase.AddUser(dummy)
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, errors.New("invalid username").Error())
+		assert.Equal(t, -1, res)
 	})
 }
 
@@ -195,31 +220,42 @@ func TestUpdateUser(t *testing.T) {
 		Phone:    "081936665965",
 		Password: "12345678",
 	}
-	outputData := domain.User{
-		ID:       1,
-		Fullname: "Rizuana Nadifatul",
-		Username: "rizunadiva",
-		Phone:    "081936665965",
-		Password: "12345678",
-	}
+	// outputData := domain.User{
+	// 	ID:       1,
+	// 	Fullname: "Rizuana Nadifatul",
+	// 	Username: "rizunadiva",
+	// 	Phone:    "081936665965",
+	// 	Password: "12345678",
+	// }
 	t.Run("Success Update", func(t *testing.T) {
-		repo.On("Update", mock.Anything, mock.Anything).Return(insertData, nil).Once()
+		repo.On("Update", mock.Anything, mock.Anything).Return(1, nil).Once()
 
 		useCase := New(repo, validator.New())
 
 		res, err := useCase.UpdateUser(int(insertData.ID), insertData)
 		assert.Nil(t, err)
-		assert.Equal(t, outputData, res)
+		assert.Equal(t, 1, res)
 		repo.AssertExpectations(t)
 	})
-	t.Run("Update User Failed", func(t *testing.T) {
-		repo.On("Update", mock.Anything, mock.Anything).Return(domain.User{}, errors.New("error update user")).Once()
+	t.Run("Username or phone number already exist", func(t *testing.T) {
+		repo.On("Update", mock.Anything, mock.Anything).Return(0, errors.New("username or phone number already exist")).Once()
 
 		useCase := New(repo, validator.New())
 
 		_, err := useCase.UpdateUser(int(insertData.ID), insertData)
 		assert.NotNil(t, err)
-		assert.EqualError(t, err, errors.New("error update user").Error())
+		assert.EqualError(t, err, errors.New("username or phone number already exist").Error())
+		repo.AssertExpectations(t)
+	})
+	t.Run("Error from server", func(t *testing.T) {
+		repo.On("Update", mock.Anything, mock.Anything).Return(0, gorm.ErrInvalidValueOfLength).Once()
+
+		useCase := New(repo, validator.New())
+
+		insertData.Username = "123aoeijakdngnsvbsnzoczbjfakdjfoadijfoangnbcoloijapdfaposdjfpk"
+		res, err := useCase.UpdateUser(int(insertData.ID), insertData)
+		assert.NotNil(t, err)
+		assert.Equal(t, 0, res)
 		repo.AssertExpectations(t)
 	})
 }
