@@ -10,3 +10,7 @@ type MidtransCallbackRequest struct {
 	Settlement_Time    string `json:"settlement_time" form:"settlement_time"`
 	Payment_Type       string `json:"payment_type" form:"payment_type"`
 }
+
+type CancelOrder struct {
+	Order_ID string `json:"order_id" form:"order_id" validate:"required"`
+}

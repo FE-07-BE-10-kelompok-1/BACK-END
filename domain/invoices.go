@@ -32,6 +32,8 @@ type InvoiceUsecase interface {
 	DeleteCarts(id uint) error
 	GetAllOrders(user User) ([]GetAllInvoices, error)
 	MidtransCallback(data Invoice, id string) error
+	GetOrder(id string, userID uint) error
+	UpdateStockAfterCancel(id string) error
 }
 
 type InvoiceData interface {
@@ -43,4 +45,6 @@ type InvoiceData interface {
 	GetAll() ([]GetAllInvoices, error)
 	GetMyOrders(id uint) ([]GetAllInvoices, error)
 	Update(data Invoice, id string) error
+	GetOrder(id string, userID uint) error
+	UpdateStockAfterCancel(id string) error
 }
