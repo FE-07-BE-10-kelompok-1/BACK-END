@@ -69,3 +69,50 @@ func (id *invoiceData) DeleteCarts(userID uint) error {
 	err := id.db.Exec("UPDATE carts SET deleted_at = now() WHERE users_id = ?", userID).Error
 	return err
 }
+
+func (id *invoiceData) GetAll() ([]domain.GetAllInvoices, error) {
+	var invoiceData []domain.GetAllInvoices
+	id.db.Raw("SELECT i.id, users.username, i.total, i.status, i.payment_link, i.payment_method, i.paid_at, i.created_at FROM invoices i INNER JOIN users ON users.id = i.users_id").Scan(&invoiceData)
+
+	for i := 0; i < len(invoiceData); i++ {
+		var items []domain.JoinOrderWithBooks
+		id.db.Raw("SELECT o.id, o.invoice_id, o.books_id, b.title, b.image, b.price FROM orders o INNER JOIN books b ON o.books_id = b.id WHERE o.invoice_id = ?", invoiceData[i].ID).Scan(&items)
+		invoiceData[i].Orders = items
+	}
+
+	return invoiceData, nil
+}
+
+func (id *invoiceData) GetMyOrders(userID uint) ([]domain.GetAllInvoices, error) {
+	var invoiceData []domain.GetAllInvoices
+	id.db.Raw("SELECT i.id, users.username, i.total, i.status, i.payment_link, i.payment_method, i.paid_at, i.created_at FROM invoices i INNER JOIN users ON users.id = i.users_id WHERE users.id = ?", userID).Scan(&invoiceData)
+
+	for i := 0; i < len(invoiceData); i++ {
+		var items []domain.JoinOrderWithBooks
+		id.db.Raw("SELECT o.id, o.invoice_id, o.books_id, b.title, b.image, b.price FROM orders o INNER JOIN books b ON o.books_id = b.id WHERE o.invoice_id = ?", invoiceData[i].ID).Scan(&items)
+		invoiceData[i].Orders = items
+	}
+
+	return invoiceData, nil
+}
+
+func (id *invoiceData) Update(data domain.Invoice, orderID string) error {
+	err := id.db.Model(&Invoice{}).Where("id = ?", orderID).Updates(ToEntity(data)).Error
+	return err
+}
+
+func (id *invoiceData) GetOrder(orderID string, userID uint) error {
+	err := id.db.Where("id = ? and users_id = ?", orderID, userID).First(&Invoice{}).Error
+	if err != nil {
+		return errors.New("data not found, either not yours or there really isn't such data")
+	}
+
+	return nil
+}
+
+func (id *invoiceData) UpdateStockAfterCancel(orderID string) error {
+	var booksID []uint
+	id.db.Raw("SELECT books_id FROM orders WHERE invoice_id = ?", orderID).Scan(&booksID)
+	err := id.db.Exec("UPDATE books SET stock = stock + 1, updated_at = now() WHERE id in (?)", booksID).Error
+	return err
+}

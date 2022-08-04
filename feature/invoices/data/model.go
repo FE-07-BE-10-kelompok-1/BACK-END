@@ -3,7 +3,6 @@ package data
 import (
 	"bookstore/domain"
 	"bookstore/feature/orders/data"
-	"time"
 
 	"gorm.io/gorm"
 )
@@ -16,17 +15,19 @@ type Invoice struct {
 	Status         string `gorm:"default:waiting"`
 	Payment_Link   string
 	Payment_Method string       `gorm:"default:NULL"`
-	Paid_At        time.Time    `gorm:"default:NULL"`
+	Paid_At        string       `gorm:"default:NULL"`
 	Orders         []data.Order `gorm:"foreignKey:Invoice_ID"`
 }
 
 func ToEntity(data domain.Invoice) Invoice {
 	return Invoice{
-		ID:           data.ID,
-		Users_ID:     data.Users_ID,
-		Total:        data.Total,
-		Status:       data.Status,
-		Payment_Link: data.Payment_Link,
+		ID:             data.ID,
+		Users_ID:       data.Users_ID,
+		Total:          data.Total,
+		Status:         data.Status,
+		Payment_Link:   data.Payment_Link,
+		Payment_Method: data.Payment_Method,
+		Paid_At:        data.Paid_At,
 	}
 }
 

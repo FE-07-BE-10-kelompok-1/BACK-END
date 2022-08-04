@@ -159,8 +159,24 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/requestBodyBooks"
       responses:
-        "200":
-          $ref: "#/components/responses/successOperationNonData"
+        "201":
+          description: success create books
+          content:
+            application/json:
+              example: {
+                code: 201,
+                data: {
+                  id: 16,
+                  title: "buku kesepuluh",
+                  image: "https://bookstorealtagroupproject.s3.ap-southeast-1.amazonaws.com/images/614022c8-8ad5-4e77-ae64-b4d7b43a6e1f_cvss.PNG",
+                  price: 20000,
+                  stock: 12,
+                  author: "atha",
+                  sinopsis: "atha",
+                  file: "https://bookstorealtagroupproject.s3.ap-southeast-1.amazonaws.com/files/5c873746-a091-462d-a904-8c17bce296ce_CV_ATHA-DHAIFFATHIN.pdf"
+                },
+                message: "success create new book"
+              }
         "400":
           $ref: "#/components/responses/createBooksFailed"
         "500":
@@ -391,8 +407,6 @@ paths:
       tags:
         - Orders
       summary: Get All Orders (if role =admin all, if role=user all that user orders)
-      parameters:
-        - $ref: "#/components/parameters/idParam"
       security:
         - JWTAuth: []
       responses:
@@ -406,6 +420,46 @@ paths:
             application/json:
               schema:
                 type: string
+              example:
+                code: 500
+                message: internal server error
+  /orders/cancel:
+    post: 
+      security:
+        - JWTAuth: []
+      tags:
+        - "Orders"
+      summary: cancel order endpoint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+            example:
+              order_id: 1287g3e23edgaw-bf-2378etbrg-hwf
+      responses:
+        "200":
+          description: success cancel order
+          content:
+            application/json:
+              example:
+                code: 200
+                message: success canceling order
+        "400":
+          description: bad request
+          content:
+            application/json:
+              example:
+                code: 400
+                message: bad request
+        "500":
+          description: internal server error
+          content:
+            application/json:
               example:
                 code: 500
                 message: internal server error
@@ -1206,18 +1260,44 @@ components:
       description: Success Operation
       content:
         application/json:
-          schema:
-            $ref: "#/components/schemas/responseOrderWithData"
           example:
             code: 200
             data: [
               {
-                id: 1,
-                order_id: 5,
-                invoice_id: 1,
-                title: "our story",
-                price: 200000,
-                qty: 1,
+                id: "afsdfsdfsd-asdasd",
+                username: "atha",
+                total: 20000,
+                status: settlement,
+                payment_link: "url.com",
+                payment_method: "gopay",
+                paid_at: "2022-08-04 14:36:15",
+                created_at: "2022-08-04T07:33:39.025Z",
+                orders: [{
+                  id: 1,
+                  invoice_id: "6af8b4e5-5280-46d4-8262-09c5c6e262f1",
+                  books_id: 1,
+                  title: "CV_Atha_Dhaiffathin",
+                  image: "https://bookstorealtagroupproject.s3.ap-southeast-1.amazonaws.com/images/6a6de40c-f5a6-4f00-9494-47733b8a8270_ERD.jpg",
+                  price: 20000
+                }],
+              },
+              {
+                id: "afsdfsdfsd-asdasd",
+                username: "atha",
+                total: 20000,
+                status: settlement,
+                payment_link: "url.com",
+                payment_method: "gopay",
+                paid_at: "2022-08-04 14:36:15",
+                created_at: "2022-08-04T07:33:39.025Z",
+                orders: [{
+                  id: 1,
+                  invoice_id: "6af8b4e5-5280-46d4-8262-09c5c6e262f1",
+                  books_id: 1,
+                  title: "CV_Atha_Dhaiffathin",
+                  image: "https://bookstorealtagroupproject.s3.ap-southeast-1.amazonaws.com/images/6a6de40c-f5a6-4f00-9494-47733b8a8270_ERD.jpg",
+                  price: 20000
+                }],
               }
             ]
             message: "success"

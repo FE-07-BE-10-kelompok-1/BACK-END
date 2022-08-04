@@ -12,6 +12,7 @@ type JoinCartWithBooks struct {
 	Title    string
 	Price    uint
 	Image    string
+	Author   string
 }
 
 type CartUsecase interface {
