@@ -1013,7 +1013,7 @@ components:
             $ref: "#/components/schemas/responseUserWithData"
           example:
             code: 200
-            data: { id: 1, fullname: cha eun woo, username: chaeunwoo, phone: "081936665965", password: "123" }
+            data: { id: 1, fullname: cha eun woo, username: chaeunwoo, phone: "081936665965", password: "$2a$10$.8HsdlCvF4jpS0dNU.4fYu/v/kY39ReHcej.Vh17QpdfzDqJBiO1S", role: "user" }
             message: Success Operation
     getDataByIdFailed:
       description: Bad Request Response
