@@ -1,0 +1,5 @@
+mode: set
+bookstore/feature/carts/usecase/logic.go:9.49,13.2 1 1
+bookstore/feature/carts/usecase/logic.go:15.58,18.2 2 1
+bookstore/feature/carts/usecase/logic.go:20.78,23.2 2 1
+bookstore/feature/carts/usecase/logic.go:25.63,28.2 2 1
