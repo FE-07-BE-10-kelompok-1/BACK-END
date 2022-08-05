@@ -38,6 +38,6 @@ func (br *BookUpdateRequest) ToDomain() domain.Book {
 		Price:    br.Price,
 		Stock:    br.Stock,
 		Author:   br.Author,
-		Sinopsis: br.Author,
+		Sinopsis: br.Sinopsis,
 	}
 }
